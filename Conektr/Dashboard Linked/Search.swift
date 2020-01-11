@@ -13,60 +13,7 @@ import UIKit
 let search = s()
 class s: UIView {
     
-    /*--------------------------------------------------------------*/
     
-    ///////////////////////////////////////////
-    //////////////////////////////////////////
-    //////////////////// BUTTON
-    //////////////////////////////////////////
-    @objc func quoteButton(_ btn:UIButton){
-        print("quote button")
-    }
-    
-    ///////////////////////////////////////////////
-    //////////////////////////////////////////////
-    /////////////// PROUCT ADD TO CART BUTTON
-    //////////////////////////////////////////////
-    @objc func AddAllCheckedProduct(){
-        print("check added")
-    }
-    ///////////////////////////////////////////////
-    //////////////////////////////////////////////
-    /////////////// PRODUCT FAVOURITE BUTTON
-    //////////////////////////////////////////////
-    @objc func productRadioHeartButton(_ btn:UIButton){
-        print("heart btn")
-    }
-    
-    ///////////////////////////////////////////////
-    //////////////////////////////////////////////
-    /////////////// PRODUCT BAR BUTTON
-    //////////////////////////////////////////////
-    @objc func productRadioBarButton(_ btn:UIButton){
-        print("bar button")
-    }
-    ///////////////////////////////////////////////
-    //////////////////////////////////////////////
-    /////////////// PRODUCT CHECKBOX BUTTON
-    //////////////////////////////////////////////
-    @objc func productCheckboxButton(_ btn:UIButton){
-        print("check button")
-    }
-    ///////////////////////////////////////////////
-    //////////////////////////////////////////////
-    /////////////// PRODUCT Shopping BUTTON
-    //////////////////////////////////////////////
-    @objc func productStoreButton(_ btn:UIButton){
-        print("shopping button")
-    }
-    ///////////////////////////////////////////////
-    //////////////////////////////////////////////
-    /////////////// click on product BUTTON
-    //////////////////////////////////////////////
-    @objc func ClickOnproductButton(_ tap:UITapGestureRecognizer){
-        print("tapon product \(tap.view!.tag)")
-    }
-    /*--------------------------------------------------------------*/
     
     
     
@@ -79,7 +26,7 @@ class s: UIView {
     
     
     
-    
+    // MARK:- CREATE
     func create(login:Bool,view:UIScrollView){
         search.parentbody = view
         search.issignin = login
@@ -181,6 +128,17 @@ class s: UIView {
         search.check[0].Label(x: search.check[0].checkBox.frame.maxX+5, y: search.layout.view.frame.maxY+10, width: 80, height: 60, txt: "Check All", fontsize: 16, bold: false, cornerRadius: 0, border: 0, borderColor: .clear, alignment: .left, bkcolor: .clear, txtcolor: #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), view: search.parentbody)
         search.check[0].Button(x: search.check[0].label.frame.maxX, y: search.layout.view.frame.maxY+10, width: 230, height: 60, title: "ADD ALL PRODUCTS TO CART \n (TOTAL PRODUCT: 0)", fontsize: 14, any: self, function: #selector(search.AddAllCheckedProduct), cornerRadius: 10, bordercolor: .clear, bkcolor: #colorLiteral(red: 0.4375680685, green: 0.2701445818, blue: 0.6246482134, alpha: 1), txtcolor: #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), view: search.parentbody)
         search.check[0].button.titleLabel?.lineBreakMode = NSLineBreakMode.byCharWrapping
+        
+        if searchProductobj.count == 0 {
+            search.check[0].checkBox.isHidden = true
+            search.check[0].label.isHidden = true
+            search.check[0].button.isHidden = true
+        }
+        else{
+            search.check[0].checkBox.isHidden = false
+            search.check[0].label.isHidden = false
+            search.check[0].button.isHidden = false
+        }
     }
     
     func CreateCheck2(top:CGFloat){
@@ -194,6 +152,22 @@ class s: UIView {
         search.parentbody.contentSize.height = search.check[1].button.frame.maxY+10
         
         
+        let msg = UI()
+        msg.Label(x: 10, y: 150, width: x-20, height: 50, txt: "Search Not Found", fontsize: 18, bold: false, cornerRadius: 0, border: 0, borderColor: .clear, alignment: .center, bkcolor: .clear, txtcolor: #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), view: search.parentbody)
+        
+        
+        if searchProductobj.count == 0 {
+            msg.label.isHidden = false
+            search.check[1].checkBox.isHidden = true
+            search.check[1].label.isHidden = true
+            search.check[1].button.isHidden = true
+        }
+        else{
+            msg.label.isHidden = false
+            search.check[1].checkBox.isHidden = false
+            search.check[1].label.isHidden = false
+            search.check[1].button.isHidden = false
+        }
     }
     /////////////// PRODUCT CHECKBOX  BUTTON
     @objc func productCheckBox(){}
@@ -214,7 +188,7 @@ class s: UIView {
     
     
     
-    
+    //MARK:- ADD Product List
     /////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////// Add Promotion Offer Product
     var pview:[UI] = []
@@ -257,6 +231,7 @@ class s: UIView {
             var topforcheck:CGFloat = 0
             var top = search.check[0].button.frame.maxY+10
             for i in 0..<searchProductobj.count {
+                
                 search.pview.append(UI())
                 search.pimag.append(UI())
                 search.ptitle.append(UI())
@@ -384,5 +359,93 @@ class s: UIView {
     
     
     
+    
+    
+    
+    
+    
+    //MARK:- BUTTONS
+    /*--------------------------------------------------------------*/
+    
+    ///////////////////////////////////////////
+    //////////////////////////////////////////
+    //////////////////// BUTTON
+    //////////////////////////////////////////
+    @objc func quoteButton(_ btn:UIButton){
+        print("quote button")
+    }
+    
+    ///////////////////////////////////////////////
+    //////////////////////////////////////////////
+    /////////////// PROUCT ADD TO CART BUTTON
+    //////////////////////////////////////////////
+    @objc func AddAllCheckedProduct(){
+        print("check added")
+    }
+    ///////////////////////////////////////////////
+    //////////////////////////////////////////////
+    /////////////// PRODUCT FAVOURITE BUTTON
+    //////////////////////////////////////////////
+    @objc func productRadioHeartButton(_ btn:UIButton){
+        print("heart btn")
+    }
+    
+    ///////////////////////////////////////////////
+    //////////////////////////////////////////////
+    /////////////// PRODUCT BAR BUTTON
+    //////////////////////////////////////////////
+    @objc func productRadioBarButton(_ btn:UIButton){
+        print("bar button")
+    }
+    ///////////////////////////////////////////////
+    //////////////////////////////////////////////
+    /////////////// PRODUCT CHECKBOX BUTTON
+    //////////////////////////////////////////////
+    @objc func productCheckboxButton(_ btn:UIButton){
+        print("check button")
+    }
+    ///////////////////////////////////////////////
+    //////////////////////////////////////////////
+    /////////////// PRODUCT Shopping BUTTON
+    //////////////////////////////////////////////
+    @objc func productStoreButton(_ btn:UIButton){
+        print("shopping button")
+    }
+    ///////////////////////////////////////////////
+    //////////////////////////////////////////////
+    /////////////// click on product BUTTON
+    //////////////////////////////////////////////
+    @objc func ClickOnproductButton(_ productid:UITapGestureRecognizer){
+        print("tapon product \(productid.view!.tag)")
+        for i in 0..<searchProductobj.count {
+            if productid.view!.tag == searchProductobj[i].id {
+                productdetail.isSelected = searchProductobj[i].isSelected
+//                productdetail.distributorID = searchProductobj[i].distributorID
+//                productdetail.distributorName = searchProductobj[i].distributorName
+                productdetail.id = searchProductobj[i].id
+                productdetail.imag = self.pimag[i].imag.image ?? UIImage()
+                productdetail.imagUrl = searchProductobj[i].imagUrl
+                productdetail.title = searchProductobj[i].title
+                productdetail.sku = searchProductobj[i].sku
+//                productdetail.typeId = searchProductobj[i].typeId
+                productdetail.price = searchProductobj[i].price
+                productdetail.discount = searchProductobj[i].discount
+                productdetail.quantity = searchProductobj[i].quantity
+                productdetail.description = searchProductobj[i].description
+                productdetail.config = searchProductobj[i].config
+                productdetail.variant = searchProductobj[i].variant
+                productdetail.pricing = searchProductobj[i].pricing
+                
+                
+                if productdetail.typeId == "configurable" {
+                    let prodetailop = ProductOptionAPIVC()
+                    prodetailop.GetProductOptions(sku: productdetail.sku)
+                }
+            }
+        }
+        product.create(updateQuote: false, view: bodyfor.product.scrollview)
+        search.disAppear()
+    }
+    /*--------------------------------------------------------------*/
 }
     

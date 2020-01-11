@@ -133,7 +133,6 @@
                 var isSelected = false
                 
                 var id = Int()
-                var distributor = String()
                 var imag = UIImage()
                 var imagUrl = String()
                 var title = String()
@@ -145,6 +144,16 @@
                 var config = String()
                 var variant = String()
                 var pricing = String()
+                
+                
+                var distributorID = Int()
+                var distributorName = String()
+                
+                // if type if not simple
+                var startprice = Double()
+                var endprice = Double()
+                var variantlist:[vlist] = []
+                var configlist:[clist] = []
             }
             var billingAddObj:[AddressElement] = []
             var SelectedBillingAddress:AddressElement = AddressElement()

@@ -111,7 +111,7 @@ class Dashboard: UIViewController {
                     productdetail.isSelected = productobj[i].isSelected
                     productdetail.distributorID = productobj[i].distributorID
                     productdetail.distributorName = productobj[i].distributorName
-                    productdetail.id = productobj[i].distributorID
+                    productdetail.id = productobj[i].id
                     productdetail.imag = self.pimag[i].imag.image ?? UIImage()
                     productdetail.imagUrl = productobj[i].imagUrl
                     productdetail.title = productobj[i].title
