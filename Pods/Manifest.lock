@@ -1,0 +1,56 @@
+PODS:
+  - AFNetworking (3.2.1):
+    - AFNetworking/NSURLSession (= 3.2.1)
+    - AFNetworking/Reachability (= 3.2.1)
+    - AFNetworking/Security (= 3.2.1)
+    - AFNetworking/Serialization (= 3.2.1)
+    - AFNetworking/UIKit (= 3.2.1)
+  - AFNetworking/NSURLSession (3.2.1):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/Reachability (3.2.1)
+  - AFNetworking/Security (3.2.1)
+  - AFNetworking/Serialization (3.2.1)
+  - AFNetworking/UIKit (3.2.1):
+    - AFNetworking/NSURLSession
+  - Alamofire (4.9.1)
+  - IQKeyboardManagerSwift (6.5.4)
+  - MBProgressHUD (1.1.0)
+  - MTBBarcodeScanner (5.0.11)
+  - SDWebImage (5.4.0):
+    - SDWebImage/Core (= 5.4.0)
+  - SDWebImage/Core (5.4.0)
+  - SwiftGoogleTranslate (0.2.1)
+
+DEPENDENCIES:
+  - AFNetworking
+  - Alamofire
+  - IQKeyboardManagerSwift
+  - MBProgressHUD
+  - MTBBarcodeScanner
+  - SDWebImage
+  - SwiftGoogleTranslate
+
+SPEC REPOS:
+  trunk:
+    - AFNetworking
+    - Alamofire
+    - IQKeyboardManagerSwift
+    - MBProgressHUD
+    - MTBBarcodeScanner
+    - SDWebImage
+    - SwiftGoogleTranslate
+
+SPEC CHECKSUMS:
+  AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
+  Alamofire: 85e8a02c69d6020a0d734f6054870d7ecb75cf18
+  IQKeyboardManagerSwift: 2dde0fc70110e8eac7ccce2a46fdbec6a850b414
+  MBProgressHUD: e7baa36a220447d8aeb12769bf0585582f3866d9
+  MTBBarcodeScanner: f453b33c4b7dfe545d8c6484ed744d55671788cb
+  SDWebImage: 5bf6aec6481ae2a062bdc59f9d6c1d1e552090e0
+  SwiftGoogleTranslate: 96960d3548e800e15b347518afca546d2edc8519
+
+PODFILE CHECKSUM: f39c748c84635a7c26f1a4538fec52e9d4572d2d
+
+COCOAPODS: 1.8.4
