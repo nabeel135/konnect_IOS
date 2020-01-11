@@ -487,12 +487,12 @@ extension shoplistVC{
             let v = mview[mview.count-1].view
             mcheck[mview.count-1].clickableimage(x: 10, y: 25, width: 30, height: 30, image: UIImage(named: "checkfalse")!, cornerRadius: 0, borderWidth: 0, borderColor: .clear, function: #selector(moveselectpage(_:)), any: self, view: v)
             mcheck[mview.count-1].clickableimg.tag = obj.id
-            mlabel[mview.count-1].Label(x: 50, y: 0, width: x-130, height: 80, txt: "Copy To ( "+obj.title+" )", fontsize: 16, bold: false, cornerRadius: 10, border: 0, borderColor: .clear, alignment: .center, bkcolor: #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), txtcolor: #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), view: v)
+            mlabel[mview.count-1].Label(x: 50, y: 0, width: x-130, height: 80, txt: "Move To ( "+obj.title+" )", fontsize: 16, bold: false, cornerRadius: 10, border: 0, borderColor: .clear, alignment: .center, bkcolor: #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), txtcolor: #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), view: v)
             top+=80
             
         }
         
-        movebtn.Button(x: (x/2)-100, y: top+10, width: 200, height: 50, title: "COPY ITEM", fontsize: 14, any: self, function: #selector(moveto(_:)), cornerRadius: 5, bordercolor: .clear, bkcolor: #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), txtcolor: #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), view: bodyfor.shoplistmovepop.scrollview)
+        movebtn.Button(x: (x/2)-100, y: top+10, width: 200, height: 50, title: "MOVE ITEM", fontsize: 14, any: self, function: #selector(moveto(_:)), cornerRadius: 5, bordercolor: .clear, bkcolor: #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), txtcolor: #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), view: bodyfor.shoplistmovepop.scrollview)
         movebtn.button.tag = productid
         
     }

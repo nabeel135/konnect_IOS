@@ -16,10 +16,20 @@ class submitquoteVC: UIViewController {
     @IBOutlet weak var continueShopBUTTON: UIButton!
     @IBAction func continueShopBUTTON(_ sender: UIButton) {
         print("continue shope")
+        quotepop.disAppear()
+        // dashboard liked pages
+        AllCategories.disAppear()
+        allBrands.disAppear()
+        product.disAppear()
+        Distributor.disAppear()
+        promotion.disAppear()
+        bodyfor.compare.scrollview.isHidden = true
+        bodyfor.quotecart.scrollview.isHidden = true
+        bodyfor.submitquote.scrollview.isHidden = true
     }
     
     @IBAction func quoteBUTTON(_ sender: UIButton) {
-        print("quote button")
+        quotepop.create(quotebtn: sender, inview: self.view)
     }
     
     

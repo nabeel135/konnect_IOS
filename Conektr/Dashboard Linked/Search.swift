@@ -423,7 +423,7 @@ class s: UIView {
 //                productdetail.distributorID = searchProductobj[i].distributorID
 //                productdetail.distributorName = searchProductobj[i].distributorName
                 productdetail.id = searchProductobj[i].id
-                productdetail.imag = self.pimag[i].imag.image ?? UIImage()
+                productdetail.imag = searchProductobj[i].imag
                 productdetail.imagUrl = searchProductobj[i].imagUrl
                 productdetail.title = searchProductobj[i].title
                 productdetail.sku = searchProductobj[i].sku

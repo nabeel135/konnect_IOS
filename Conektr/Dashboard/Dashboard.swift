@@ -422,7 +422,6 @@ class Dashboard: UIViewController {
     ////////////////////////////////////////////////
     @objc func quotebutton(_btn:UIButton){
         quotepop.create(quotebtn: quotebtn.clickableimg, inview: bodyscroll.scrollview)
-        
     }
     /*---------------------------------------------------------------*/
 
@@ -562,6 +561,11 @@ class Dashboard: UIViewController {
         bodyfor.quotecart.ScrollView(x: 0, y: 30, width: x, height: y-100, bkcolor: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), contentwidth: x, contentheight: y-70, view: view)
         bodyfor.quotecart.scrollview.isHidden = true
         addchildview(parent: self, child: storyboardView(boardName: "main", pageID: "quoteCartVC"), view: bodyfor.quotecart.scrollview)
+        
+        bodyfor.submitquote.ScrollView(x: 0, y: 30, width: x, height: y-100, bkcolor: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), contentwidth: x, contentheight: y-70, view: view)
+        bodyfor.submitquote.scrollview.isHidden = true
+        addchildview(parent: self, child: storyboardView(boardName: "main", pageID: "submitquoteVC"), view: bodyfor.submitquote.scrollview)
+        
         
         
         
@@ -748,6 +752,7 @@ class Dashboard: UIViewController {
         promotion.disAppear()
         bodyfor.compare.scrollview.isHidden = true
         bodyfor.quotecart.scrollview.isHidden = true
+        bodyfor.submitquote.scrollview.isHidden = true
         
         // footerBar
         Searchpop.disAppear()

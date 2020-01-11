@@ -19,6 +19,7 @@
                 let promotion = UI()
                 let compare = UI()
                 let quotecart = UI()
+                let submitquote = UI()
                 
                 ////////// FOOTER
                 let pop = UI()

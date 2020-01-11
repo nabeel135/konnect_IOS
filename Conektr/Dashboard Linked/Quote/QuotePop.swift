@@ -30,7 +30,7 @@ class qp: UIView {
     
     // MARK:-  CREATE
     func create(quotebtn:UIButton,inview:UIView) {
-        quotepop.scroll.ScrollView(x: x-((x/100)*85)-10, y: quotebtn.frame.maxY, width: (x/100)*85, height: 500, bkcolor: .clear, contentwidth: (x/100)*85, contentheight: quotebtn.frame.maxY, view: inview)
+        quotepop.scroll.ScrollView(x: x-((x/100)*85)-10, y: quotebtn.frame.maxY, width: (x/100)*85, height: 400, bkcolor: .clear, contentwidth: (x/100)*85, contentheight: quotebtn.frame.maxY, view: inview)
         /*------------------*/
         let triangle = UI()
         triangle.drawTriangle(
@@ -102,6 +102,9 @@ class qp: UIView {
         
         cell.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         view.View(x: 10, y: 10, width: cell.frame.size.width-20, height: cell.frame.size.height-20, bkcolor: #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), cornerRadius: 2, border: 0, borderColor: .clear, view: cell)
+        view.view.tag = quotelistobj[delegate.index].id
+        view.view.addGestureRecognizer(UITapGestureRecognizer(target: quotepop, action: #selector(quotepop.openProductBUTTON(_:))))
+        
         imag.Image(x: 10, y: 10, width: 100, height: cell.frame.size.height-20, mode: .scaleAspectFit, src: quotelistobj[delegate.index].imag, view: view.view)
         title.Label(x: 120, y: 10, width: view.view.frame.size.width-120, height: 40, txt: quotelistobj[delegate.index].title, fontsize: 12, bold: false, cornerRadius: 0, border: 0, borderColor: .clear, alignment: .left, bkcolor: .clear, txtcolor: .blue, view: view.view)
         price.Label(x: 120, y: title.label.frame.maxY, width: view.view.frame.size.width-120, height: 25, txt: "AED \((quotelistobj[delegate.index].price/100)*100)", fontsize: 14, bold: false, cornerRadius: 0, border: 0, borderColor: .clear, alignment: .left, bkcolor: .clear, txtcolor: #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1), view: view.view)
@@ -112,14 +115,14 @@ class qp: UIView {
         del.clickableimage(x: view.view.frame.size.width-30, y: view.view.frame.maxY-40, width: 20, height: 30, image: UIImage(named: "del")!, cornerRadius: 0, borderWidth: 0, borderColor: .clear, function: #selector(quotepop.delBUTTON(_:)), any: quotepop, view: view.view)
         del.clickableimg.tag = delegate.index
         
-//        quotepop.list.table.frame.size.height = cell.frame.maxY
+        //        quotepop.list.table.frame.size.height = cell.frame.maxY
     }
     
     func ondelcell(){
         quotelistobj.remove(at: quotepop.list.tableDelegate.index)
         quotepop.list.tableDelegate.numberOFrows = quotelistobj.count
         quotepop.list.table.reloadData()
-
+        
     }
     
     
@@ -128,7 +131,6 @@ class qp: UIView {
     
     // Mark:- BUTTONS
     @objc func myquoteCartBUTTON(){
-        print("quot")
         quotepop.disAppear()
         // dashboard liked pages
         AllCategories.disAppear()
@@ -138,17 +140,103 @@ class qp: UIView {
         promotion.disAppear()
         bodyfor.compare.scrollview.isHidden = true
         bodyfor.quotecart.scrollview.isHidden = false
+        bodyfor.submitquote.scrollview.isHidden = true
+
+        
         addchildview(parent: NetworkingHelper.sharedNetworkManager.appDelegate().presentedViewController!, child: storyboardView(boardName: "main", pageID: "quoteCartVC"), view: bodyfor.quotecart.scrollview)
     }
     @objc func crossBUTTON(){
         quotepop.disAppear()
     }
-    @objc func editBUTTON(_ quoteid:UIButton){
-        print("edit quote \(quoteid.tag)")
-    }
     @objc func delBUTTON(_ cellindex:UIButton){
         quotelistobj.remove(at: cellindex.tag)
         quotepop.list.tableDelegate.numberOFrows = quotelistobj.count
         quotepop.list.table.reloadData()
+    }
+    @objc func editBUTTON(_ productid:UIButton){
+        print("edit quote \(productid.tag)")
+        
+        
+        for i in 0..<quotelistobj.count {
+            if productid.tag == quotelistobj[i].id {
+                productdetail.isSelected = quotelistobj[i].isSelected
+                //                productdetail.distributorID = quotelistobj[i].distributorID
+                //                productdetail.distributorName = quotelistobj[i].distributorName
+                productdetail.id = quotelistobj[i].id
+                productdetail.imag = quotelistobj[i].imag
+                productdetail.imagUrl = quotelistobj[i].imagUrl
+                productdetail.title = quotelistobj[i].title
+                productdetail.sku = quotelistobj[i].sku
+                //                productdetail.typeId = quotelistobj[i].typeId
+                productdetail.price = quotelistobj[i].price
+                productdetail.discount = quotelistobj[i].discount
+                productdetail.quantity = quotelistobj[i].quantity
+                productdetail.description = quotelistobj[i].description
+                productdetail.config = quotelistobj[i].config
+                productdetail.variant = quotelistobj[i].variant
+                productdetail.pricing = quotelistobj[i].pricing
+                
+                
+                if productdetail.typeId == "configurable" {
+                    let prodetailop = ProductOptionAPIVC()
+                    prodetailop.GetProductOptions(sku: productdetail.sku)
+                }
+            }
+        }
+        
+        
+        quotepop.disAppear()
+        // dashboard liked pages
+        AllCategories.disAppear()
+        allBrands.disAppear()
+        product.create(updateQuote: true, view: bodyfor.product.scrollview)
+        Distributor.disAppear()
+        promotion.disAppear()
+        bodyfor.compare.scrollview.isHidden = true
+        bodyfor.quotecart.scrollview.isHidden = true
+        bodyfor.submitquote.scrollview.isHidden = true
+
+    }
+    @objc func openProductBUTTON(_ productid:UITapGestureRecognizer){
+        print("open product detail \(productid.view!.tag)")
+        
+        for i in 0..<quotelistobj.count {
+                    if productid.view!.tag == quotelistobj[i].id {
+                        productdetail.isSelected = quotelistobj[i].isSelected
+        //                productdetail.distributorID = quotelistobj[i].distributorID
+        //                productdetail.distributorName = quotelistobj[i].distributorName
+                        productdetail.id = quotelistobj[i].id
+                        productdetail.imag = quotelistobj[i].imag
+                        productdetail.imagUrl = quotelistobj[i].imagUrl
+                        productdetail.title = quotelistobj[i].title
+                        productdetail.sku = quotelistobj[i].sku
+        //                productdetail.typeId = quotelistobj[i].typeId
+                        productdetail.price = quotelistobj[i].price
+                        productdetail.discount = quotelistobj[i].discount
+                        productdetail.quantity = quotelistobj[i].quantity
+                        productdetail.description = quotelistobj[i].description
+                        productdetail.config = quotelistobj[i].config
+                        productdetail.variant = quotelistobj[i].variant
+                        productdetail.pricing = quotelistobj[i].pricing
+                        
+                        
+                        if productdetail.typeId == "configurable" {
+                            let prodetailop = ProductOptionAPIVC()
+                            prodetailop.GetProductOptions(sku: productdetail.sku)
+                        }
+                    }
+                }
+        
+        quotepop.disAppear()
+        // dashboard liked pages
+        AllCategories.disAppear()
+        allBrands.disAppear()
+        product.create(updateQuote: false, view: bodyfor.product.scrollview)
+        Distributor.disAppear()
+        promotion.disAppear()
+        bodyfor.compare.scrollview.isHidden = true
+        bodyfor.quotecart.scrollview.isHidden = true
+        bodyfor.submitquote.scrollview.isHidden = true
+
     }
 }
