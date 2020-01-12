@@ -109,12 +109,17 @@ class sp: UIView {
                                                                             let stringValue = code.stringValue!
                                                                             print("Found code: \(stringValue)")
                                                                             Searchpop.search.txtfield.text = stringValue
-                                                                            Searchpop.search.txtfield.isHidden = true
-                                                                            Searchpop.obj.button.isHidden = true
-                                                                            Searchpop.barcode.Lbutton.isHidden = true
-                                                                            Searchpop.barcode.imag.isHidden = true
-                                                                            Searchpop.search.clickableimg.isHidden = true
+//                                                                            Searchpop.search.txtfield.isHidden = true
+//                                                                            Searchpop.obj.button.isHidden = true
+//                                                                            Searchpop.barcode.Lbutton.isHidden = true
+//                                                                            Searchpop.barcode.imag.isHidden = true
+//                                                                            Searchpop.search.clickableimg.isHidden = true
                                                                             self.scanner?.stopScanning()
+                                                                            
+                                                                            let searchresultAPi = SearchProductAPIVC()
+                                                                            let str = "%" + Searchpop.search.txtfield.text! + "%"
+                                                                            searchresultAPi.GetSearchResult(str: str)
+                                                                            
                                                                         }
                                                                     }
                                 })

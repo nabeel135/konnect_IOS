@@ -33,6 +33,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 
                }
                else{
+                defaults.set("", forKey: "quoteToken")
         }
                
         return true

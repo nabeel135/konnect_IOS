@@ -427,7 +427,7 @@ class s: UIView {
                 productdetail.imagUrl = searchProductobj[i].imagUrl
                 productdetail.title = searchProductobj[i].title
                 productdetail.sku = searchProductobj[i].sku
-//                productdetail.typeId = searchProductobj[i].typeId
+                productdetail.typeId = searchProductobj[i].typeId
                 productdetail.price = searchProductobj[i].price
                 productdetail.discount = searchProductobj[i].discount
                 productdetail.quantity = searchProductobj[i].quantity
@@ -436,10 +436,11 @@ class s: UIView {
                 productdetail.variant = searchProductobj[i].variant
                 productdetail.pricing = searchProductobj[i].pricing
                 
-                
+                print(productdetail.typeId)
                 if productdetail.typeId == "configurable" {
                     let prodetailop = ProductOptionAPIVC()
-                    prodetailop.GetProductOptions(sku: productdetail.sku)
+//                    prodetailop.GetProductOptions(sku: productdetail.sku)
+                    prodetailop.GetProductandConfigOptions(sku: productdetail.sku)
                 }
             }
         }

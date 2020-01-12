@@ -127,7 +127,8 @@ class Dashboard: UIViewController {
                     
                     if productdetail.typeId == "configurable" {
                                             let prodetailop = ProductOptionAPIVC()
-                                            prodetailop.GetProductOptions(sku: productdetail.sku)
+//                                            prodetailop.GetProductOptions(sku: productdetail.sku)
+                                            prodetailop.GetProductandConfigOptions(sku: productdetail.sku)
                                         }
                     //                    let op = pricingoption.filter{$0.value == obj.pricing}
                     //                    let op1 = variantoption.filter{$0.value == obj.variant}
@@ -559,7 +560,7 @@ class Dashboard: UIViewController {
         
         bodyfor.quotecart.ScrollView(x: 0, y: 30, width: x, height: y-100, bkcolor: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), contentwidth: x, contentheight: y-70, view: view)
         bodyfor.quotecart.scrollview.isHidden = true
-        addchildview(parent: self, child: storyboardView(boardName: "main", pageID: "quoteCartVC"), view: bodyfor.quotecart.scrollview)
+//        addchildview(parent: self, child: storyboardView(boardName: "main", pageID: "quoteCartVC"), view: bodyfor.quotecart.scrollview)
         
         bodyfor.submitquote.ScrollView(x: 0, y: 30, width: x, height: y-100, bkcolor: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), contentwidth: x, contentheight: y-70, view: view)
         bodyfor.submitquote.scrollview.isHidden = true

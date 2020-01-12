@@ -11,7 +11,7 @@ import UIKit
 
 class AddtoCartAPIVC {
 
-    var item:CartItem?
+    var item:CartDatum?
     var ItemtoAdd:[ps]?
     
     func AddItemToCart(){
@@ -44,7 +44,7 @@ class AddtoCartAPIVC {
             do{
                 AlertHelper.showSuccessAlert(WithTitle: "Success", Message: "Sucessfully Added", Sender: NetworkingHelper.sharedNetworkManager.appDelegate().presentedViewController!)
                 let decoder = JSONDecoder()
-                let array = try decoder.decode(CartItem.self, from: responseObject as! Data)
+                let array = try decoder.decode(CartDatum.self, from: responseObject as! Data)
                 
 //                print(array)
             }

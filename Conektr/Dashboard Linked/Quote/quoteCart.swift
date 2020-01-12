@@ -62,9 +62,75 @@ class quoteCartVC: UIViewController {
         
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        GetQuoteDetail()
+    }
     
-    
-    
+    func GetQuoteDetail() {
+        let manager = NetworkingHelper.sharedNetworkManager
+        let urlString = "/index.php/rest/V1/guest-carts/enF511f8aPh14qYOUzjZrNjdBPJMmRtA/totals"
+        let quoteid = UserDefaults.standard.value(forKey: "quoteToken") as? String
+        
+        if(quoteid == "" || quoteid == nil)
+        {
+            AlertHelper.showErrorAlert(WithTitle: "Error", Message: "No Quote Found", Sender: NetworkingHelper.sharedNetworkManager.appDelegate().presentedViewController!)
+        }
+        else
+        {
+            let urlString = "/index.php/rest/V1/guest-carts/\(quoteid!)/totals"
+            manager.GetQuoteDetail(withurlString: urlString, successBlock: GetQuoteDetailSucceeded, failureBlock: GetQuoteDetaiFailed)
+            //        manager.AddItemtoQuote(withurlString: urlString, withParameters: parameters as AnyObject, successBlock: AddItemToQuoteSucceeded, failureBlock: GetQuoteListFailed)
+        }
+    }
+    func GetQuoteDetailSucceeded(task:URLSessionDataTask, responseObject:Any?)
+    {
+        if responseObject == nil
+        {
+            return
+        }
+        
+        do{
+            let str = String(decoding: responseObject as! Data, as: UTF8.self)
+            let decoder = JSONDecoder()
+            let array: Dictionary<String, Any> = (try! JSONSerialization.jsonObject(with: responseObject as! Data, options: JSONSerialization.ReadingOptions.mutableContainers)) as! Dictionary<String, Any>
+            print(array)
+            
+            
+//            let array = try decoder.decode(QuoteList.self, from: responseObject as! Data)
+//            quotelistobj.removeAll()
+//            for obj in array
+//            {
+//                var item = ps()
+//                item.sku = obj.sku ?? "N/A"
+//                item.title = obj.name ?? "N/A"
+//                item.id = obj.itemID ?? 0
+//                item.quantity = obj.qty ?? 0
+//                item.typeId = obj.productType == ProductType.simple ? "simple":"configurable"
+//                item.price = obj.price ?? 0.0
+//                quotelistobj.append(item)
+//            }
+//            quotepop.quoteList()
+        }
+        catch
+        {
+            
+        }
+        
+        let dashboard = NetworkingHelper.sharedNetworkManager.appDelegate().presentedViewController!
+        weak var weakSelf = dashboard
+        
+    }
+    func GetQuoteDetaiFailed(task:URLSessionDataTask?, error:Error)
+    {
+        if error.localizedDescription == "Request failed: unauthorized (401)"
+        {
+            UserDefaults.standard.set(false, forKey: "IsLogined")
+            AlertHelper.showErrorAlert(WithTitle: "Error", Message: "You are not Login", Sender: NetworkingHelper.sharedNetworkManager.appDelegate().presentedViewController!)
+            return
+        }
+        weak var weakSelf = self
+        AlertHelper.showErrorAlert(WithTitle: "Error", Message: error.localizedDescription, Sender: NetworkingHelper.sharedNetworkManager.appDelegate().presentedViewController!)
+    }
     
     
     //Quote list TABLEVIEW
@@ -134,6 +200,7 @@ class quoteCartVC: UIViewController {
         container(top: quotelist.table.frame.maxY)
     }
     func ondelcell(){
+        
         quotelistobj.remove(at:quotelist.tableDelegate.index)
         quotelistUI()
         quotelist.table.reloadData()
@@ -362,7 +429,8 @@ class quoteCartVC: UIViewController {
                 
                 if productdetail.typeId == "configurable" {
                     let prodetailop = ProductOptionAPIVC()
-                    prodetailop.GetProductOptions(sku: productdetail.sku)
+//                    prodetailop.GetProductOptions(sku: productdetail.sku)
+                    prodetailop.GetProductandConfigOptions(sku: productdetail.sku)
                 }
             }
         }
@@ -406,7 +474,8 @@ class quoteCartVC: UIViewController {
                 
                 if productdetail.typeId == "configurable" {
                     let prodetailop = ProductOptionAPIVC()
-                    prodetailop.GetProductOptions(sku: productdetail.sku)
+//                    prodetailop.GetProductOptions(sku: productdetail.sku)
+                    prodetailop.GetProductandConfigOptions(sku: productdetail.sku)
                 }
             }
         }

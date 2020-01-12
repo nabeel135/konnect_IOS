@@ -10,7 +10,7 @@ import UIKit
 
 class UpdateCartAPIVC {
 
-    var items:[CartItem]?
+    var items:[CartDatum]?
     
     
     
@@ -43,7 +43,7 @@ class UpdateCartAPIVC {
             
             do{
                 let decoder = JSONDecoder()
-                let array = try decoder.decode(CartItem.self, from: responseObject as! Data)
+                let array = try decoder.decode(CartDatum.self, from: responseObject as! Data)
                 
 //                print(array)
             }

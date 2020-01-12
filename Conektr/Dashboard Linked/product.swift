@@ -48,7 +48,7 @@ class p: UIView {
        print("add to Cart")
         
         let vc = AddtoCartAPIVC()
-                    var item = CartItem()
+                    var item = CartDatum()
                     item.sku = productdetail.sku
                     item.quoteID =  UserDefaults.standard.string(forKey: "quote_id")
                     item.qty = Int(product.quantity.txtfield.text ?? "1")
@@ -74,12 +74,23 @@ class p: UIView {
                 print("add to quote")
         
         let addtoquote = AddtoQuoteAPIVC()
-        var item = CartItem()
+        var item = CartDatum()
         item.sku = productdetail.sku
         item.quoteID =  ""
         item.qty = Int(product.quantity.txtfield.text ?? "1")
         addtoquote.item = item
-        addtoquote.CreateQuote1()
+        let quote_id = UserDefaults.standard.value(forKey: "quoteToken") as? String
+        if(quote_id == nil || quote_id == "")
+        {
+            addtoquote.CreateQuote1()
+        }
+        else
+        {
+            addtoquote.requestser = addtoquote.manager.requestSerializer
+            addtoquote.quoteId = quote_id!
+            addtoquote.GetItemIdForQuote()
+        }
+        
         
     }
     ///////////////////////////////////////////

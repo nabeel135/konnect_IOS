@@ -138,6 +138,7 @@
                 var imagUrl = String()
                 var title = String()
                 var sku = String()
+                var typeId = String()
                 var price = Double()
                 var discount = Double()
                 var quantity = Int()
@@ -156,8 +157,8 @@
                 var variantlist:[vlist] = []
                 var configlist:[clist] = []
             }
-            var billingAddObj:[AddressElement] = []
-            var SelectedBillingAddress:AddressElement = AddressElement()
+            var billingAddObj:[Address] = []
+            var SelectedBillingAddress:Address = Address()
             var IsBillingSame:Int = 1
             var cartobj:[cart] = []
             class cart {
@@ -167,6 +168,7 @@
                 var distributorName = String()
                 var id = Int()
                 var imag = UIImage()
+                var imgUrl = String()
                 var title = String()
                 //    var sku = String()
                 var price = Double()
@@ -198,7 +200,7 @@
                 var l4 = ""
                 var l5 = ""
             }
-            var customer:Customer = Customer()
+            var customer:CustomerDetailModel = CustomerDetailModel()
             
             var distributorObj:[distdata] = []
             class distdata {

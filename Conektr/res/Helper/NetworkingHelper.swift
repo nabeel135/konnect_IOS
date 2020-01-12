@@ -114,10 +114,10 @@
         }
         
         // MARK: - getCartItems
-        func GetCartItems(withParameters parameters: AnyObject?, successBlock success:((URLSessionDataTask, Any?) -> Void)?, failureBlock failure:((URLSessionDataTask?, Error) -> Void)?)
+        func GetCartItems(withParameters parameters: String, successBlock success:((URLSessionDataTask, Any?) -> Void)?, failureBlock failure:((URLSessionDataTask?, Error) -> Void)?)
         {
             //            //print(self.baseURL!)
-            self.get("rest/V1/carts/mine", parameters: parameters, progress: nil, success: success , failure: failure )
+            self.get(parameters, parameters: nil, progress: nil, success: success , failure: failure )
         }
         
         // MARK: - GetCustomerDetail
@@ -161,6 +161,13 @@
             self.get(urlString, parameters: nil, progress: nil, success: success , failure: failure )
         }
         
+        // MARK: - Product Detail Options
+        //rest/V1/products/CUNI-1263010350015002
+        func ProdConDetailOptions(withurlString urlString: String, successBlock success:((URLSessionDataTask, Any?) -> Void)?, failureBlock failure:((URLSessionDataTask?, Error) -> Void)?)
+        {
+            //            //print(self.baseURL!)
+            self.get(urlString, parameters: nil, progress: nil, success: success , failure: failure )
+        }
         
         // MARK: - Delete Cart
         //    rest/V1/carts/mine/items/12634
@@ -195,27 +202,33 @@
             self.get(urlString, parameters: nil, progress: nil, success: success , failure: failure )
         }
         
+        // MARK: - GetQuoteListItems
+        func GetQuoteListItems(withurlString urlString: String, successBlock success:((URLSessionDataTask, Any?) -> Void)?, failureBlock failure:((URLSessionDataTask?, Error) -> Void)?)
+        {
+            //print(self.baseURL!)
+            self.get(urlString, parameters: nil, progress: nil, success: success , failure: failure )
+        }
+        
+        
+        // MARK: - DeleteQuoteItem
+        func DeleteQuoteItem(withurlString urlString: String, successBlock success:((URLSessionDataTask, Any?) -> Void)?, failureBlock failure:((URLSessionDataTask?, Error) -> Void)?)
+        {
+            //print(self.baseURL!)
+            self.delete(urlString, parameters: nil, success: success , failure: failure )
+        }
+        
+        // MARK: - GetQuoteDetail
+        func GetQuoteDetail(withurlString urlString: String, successBlock success:((URLSessionDataTask, Any?) -> Void)?, failureBlock failure:((URLSessionDataTask?, Error) -> Void)?)
+        {
+            //print(self.baseURL!)
+            self.get(urlString, parameters: nil, progress: nil, success: success , failure: failure )
+        }
+        
         func AddItemtoQuote(withurlString urlString: String,withParameters parameters: AnyObject?, successBlock success:((URLSessionDataTask, Any?) -> Void)?, failureBlock failure:((URLSessionDataTask?, Error) -> Void)?)
         {
             //            //print(self.baseURL!)
             self.post(urlString, parameters: parameters!, progress: nil, success: success , failure: failure )
         }
-        
-        
-        //    // MARK: - getCartItems
-        //    func GetPricingOption(withParameters parameters: AnyObject?, successBlock success:((URLSessionDataTask, Any?) -> Void)?, failureBlock failure:((URLSessionDataTask?, Error) -> Void)?)
-        //    {
-        //        //print(self.baseURL!)
-        //        self.get("rest/V1/products/attributes/pricing/options", parameters: parameters, progress: nil, success: success , failure: failure )
-        //    }
-        //
-        //    // MARK: - getCartItems
-        //    func GetVariantOption(withParameters parameters: AnyObject?, successBlock success:((URLSessionDataTask, Any?) -> Void)?, failureBlock failure:((URLSessionDataTask?, Error) -> Void)?)
-        //    {
-        //        //print(self.baseURL!)
-        //        self.get("rest/V1/products/attributes/variant/options", parameters: parameters, progress: nil, success: success , failure: failure )
-        //    }
-        
         
         
         // MARK: - getCartItems

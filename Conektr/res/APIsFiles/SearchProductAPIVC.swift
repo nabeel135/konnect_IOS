@@ -43,7 +43,13 @@ class SearchProductAPIVC: UIViewController {
         do{
             //            let dictionary: Dictionary<String, AnyObject> = (try JSONSerialization.jsonObject(with: responseObject! as! Data, options: JSONSerialization.ReadingOptions.mutableContainers) as! Dictionary<String, AnyObject>)
             //            let array:[[String:Any]] = dictionary["data"] as! [[String:Any]]
+            searchProductobj.removeAll()
             let str = String(decoding: responseObject as! Data, as: UTF8.self)
+            
+            guard str != nil else {throw NetworkingHelper.NetworkErrors.NilValue}
+            let str1 = str.trimmingCharacters(in: .whitespaces)
+            guard str1 != "" else {throw NetworkingHelper.NetworkErrors.NilValue}
+            
             let decoder = JSONDecoder()
             let array = try decoder.decode(SearchResultModel.self, from: responseObject as! Data)
             searchProductobj.removeAll()
@@ -73,6 +79,7 @@ class SearchProductAPIVC: UIViewController {
                                     ps.price = pprice
                                     ps.discount = pprice+((pprice/100)*10)
                                     ps.sku = psku
+                                    ps.typeId = obj.typeID ?? "simple"
                                     ps.quantity = Int(pquantity)!
                                     ps.config = pconfig
                                     ps.variant = pvariant ?? "N/A"
@@ -81,6 +88,21 @@ class SearchProductAPIVC: UIViewController {
                                     searchProductobj.append(ps)
                             }
             
+            // footerBar
+            Searchpop.disAppear()
+            
+            // footerBar linked pages
+            shoppingCart.disAppear()
+            Checkout.disAppear()
+            SignIn.disAppear()
+            bodyfor.CreateAccount.scrollview.isHidden = true
+            forgotpassword.disAppear()
+            
+            search.create(login: UserDefaults.standard.bool(forKey: "IsLogined"), view: bodyfor.SearchResult.scrollview)
+        }
+        catch NetworkingHelper.NetworkErrors.NilValue
+        {
+            print("Error: isSuccess parameter was nil in response body")
             // footerBar
             Searchpop.disAppear()
             

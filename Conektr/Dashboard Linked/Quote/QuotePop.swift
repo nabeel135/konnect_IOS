@@ -45,6 +45,9 @@ class qp: UIView {
         quotepop.total.Label(x: quotepop.countlabel.label.frame.maxX, y: 60, width: (scroll.scrollview.frame.size.width-20)/2, height: 40, txt: "AED\(totalprice)", fontsize: 14, bold: false, cornerRadius: 0, border: 0, borderColor: .clear, alignment: .right, bkcolor: .clear, txtcolor: #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1), view: quotepop.scroll.scrollview)
         quotepop.quotecartbtn.Button(x: 10, y: 100, width: quotepop.scroll.scrollview.frame.size.width-20, height: 40, title: "MY QUOTE CART", fontsize: 12, any: quotepop, function: #selector(quotepop.myquoteCartBUTTON), cornerRadius: 5, bordercolor: .clear, bkcolor: #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), txtcolor: #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), view: quotepop.scroll.scrollview)
         quotepop.quoteList()
+        
+        let quoteVC = AddtoQuoteAPIVC()
+        quoteVC.GetQuoteList()
         /*------------------*/
         quotepop.Appear()
     }
@@ -119,9 +122,12 @@ class qp: UIView {
     }
     
     func ondelcell(){
-        quotelistobj.remove(at: quotepop.list.tableDelegate.index)
-        quotepop.list.tableDelegate.numberOFrows = quotelistobj.count
-        quotepop.list.table.reloadData()
+        
+        let addtoQuote = AddtoQuoteAPIVC()
+        addtoQuote.DeleteQuoteItem(id: quotelistobj[quotepop.list.tableDelegate.index].id)
+//        quotelistobj.remove(at: quotepop.list.tableDelegate.index)
+//        quotepop.list.tableDelegate.numberOFrows = quotelistobj.count
+//        quotepop.list.table.reloadData()
         
     }
     
@@ -142,16 +148,19 @@ class qp: UIView {
         bodyfor.quotecart.scrollview.isHidden = false
         bodyfor.submitquote.scrollview.isHidden = true
 
-        
         addchildview(parent: NetworkingHelper.sharedNetworkManager.appDelegate().presentedViewController!, child: storyboardView(boardName: "main", pageID: "quoteCartVC"), view: bodyfor.quotecart.scrollview)
     }
     @objc func crossBUTTON(){
         quotepop.disAppear()
     }
     @objc func delBUTTON(_ cellindex:UIButton){
-        quotelistobj.remove(at: cellindex.tag)
-        quotepop.list.tableDelegate.numberOFrows = quotelistobj.count
-        quotepop.list.table.reloadData()
+        
+        let addtoQuote = AddtoQuoteAPIVC()
+        addtoQuote.DeleteQuoteItem(id: quotelistobj[cellindex.tag].id)
+        
+//        quotelistobj.remove(at: cellindex.tag)
+//        quotepop.list.tableDelegate.numberOFrows = quotelistobj.count
+//        quotepop.list.table.reloadData()
     }
     @objc func editBUTTON(_ productid:UIButton){
         print("edit quote \(productid.tag)")
@@ -179,7 +188,8 @@ class qp: UIView {
                 
                 if productdetail.typeId == "configurable" {
                     let prodetailop = ProductOptionAPIVC()
-                    prodetailop.GetProductOptions(sku: productdetail.sku)
+//                    prodetailop.GetProductOptions(sku: productdetail.sku)
+                    prodetailop.GetProductandConfigOptions(sku: productdetail.sku)
                 }
             }
         }
@@ -222,7 +232,8 @@ class qp: UIView {
                         
                         if productdetail.typeId == "configurable" {
                             let prodetailop = ProductOptionAPIVC()
-                            prodetailop.GetProductOptions(sku: productdetail.sku)
+//                            prodetailop.GetProductOptions(sku: productdetail.sku)
+                            prodetailop.GetProductandConfigOptions(sku: productdetail.sku)
                         }
                     }
                 }

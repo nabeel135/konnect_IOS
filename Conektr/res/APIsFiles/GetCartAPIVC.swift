@@ -19,7 +19,22 @@ class GetCartAPIVC: UIViewController {
     func GetCart() {
                 
                 let manager = NetworkingHelper.sharedNetworkManager
-                manager.GetCartItems(withParameters: nil, successBlock: GetSucceeded, failureBlock: GetFailed)
+        let defaults = UserDefaults.standard
+                       
+                       if(defaults.bool(forKey: "IsLogined"))
+                       {
+                           manager.saveToken(token: defaults.string(forKey: "Token")!)
+                        let parameters:[String:Any] = ["token":defaults.string(forKey: "Token")!]
+                        let urlString = "/get_cart.php?token=\(defaults.string(forKey: "Token")!)"
+                        manager.GetCartItems(withParameters: urlString, successBlock: GetSucceeded, failureBlock: GetFailed)
+        //                self.GetQuote(token: defaults.string(forKey: "Token")!)
+                        
+                       }
+        else
+                       {
+                        AlertHelper.showErrorAlert(WithTitle: "Error", Message: "Try to Login Again", Sender: NetworkingHelper.sharedNetworkManager.appDelegate().presentedViewController!)
+        }
+                   
             }
             
             func GetSucceeded(task:URLSessionDataTask, responseObject:Any?)
@@ -34,32 +49,9 @@ class GetCartAPIVC: UIViewController {
                     let decoder = JSONDecoder()
                     let array = try decoder.decode(CartsModel.self, from: responseObject as! Data)
                     
-                    let defaultAddressarray = array.customer?.addresses
-                    shippingAddress.removeAll()
-                    
-                    customer = array.customer ?? Customer()
-                    
-                    for addres in defaultAddressarray ?? []
-                    {
-                        billingAddObj.append(addres)
-                        var sa1:sa = sa()
-                        sa1.l1 = (addres.firstname ?? "") + (addres.lastname ?? "")
-                        sa1.l2 = addres.city ?? ""
-                        sa1.l5 = addres.telephone ?? "N/A"
-                        sa1.l3 = "\(addres.city ?? ""), \(addres.region?.region ?? ""), \(addres.postcode ?? "")"
-                        sa1.l4 = countriesandregionObj?.filter{$0.id == addres.countryID}.first?.fullNameEnglish ?? "N/A"
-                        sa1.id = addres.id!
-                        if(addres.defaultShipping == true && addres.defaultBilling == true)
-                        {
-                            sa1.isselected = true
-                            
-                        }
-                        shippingAddress.append(sa1)
-                    }
-                    
                     cartobj.removeAll()
                     
-                    for obj in array.items ?? []
+                    for obj in array.data ?? []
                     {
                         var crt = cart()
                         crt.itemID = obj.itemID
@@ -67,11 +59,11 @@ class GetCartAPIVC: UIViewController {
                         crt.sku = obj.sku
                         crt.qty = obj.qty
                         crt.quantity = obj.qty!
-
+                        crt.imgUrl = obj.value ?? ""
                         crt.name = obj.name
                         crt.title = obj.name!
                         crt.price = Double(obj.price ?? 0)
-                        crt.productType = obj.productType == ProductType.simple ? "simple":"configurable"
+                        crt.productType = obj.productType ?? "simple"
                         crt.quoteID = obj.quoteID
                         cartobj.append(crt)
                     }
