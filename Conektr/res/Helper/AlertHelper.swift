@@ -9,6 +9,22 @@
 import UIKit
 import MBProgressHUD
 
+
+func loaderStart(){
+    let dashboard = NetworkingHelper.sharedNetworkManager.appDelegate().presentedViewController
+    weak var weakSelf = dashboard
+    AlertHelper.showLoadingAlert(WithTitle: "Loading...", OnView: weakSelf?.view ?? UIView(), Animated: false)
+}
+
+func loaderEnd(){
+    let dashboard = NetworkingHelper.sharedNetworkManager.appDelegate().presentedViewController!
+    weak var weakSelf = dashboard
+    AlertHelper.hideLoadingView(ForView: weakSelf!.view, Animated: true)
+}
+
+func showAlert(title:String,text:String){
+    AlertHelper.showErrorAlert(WithTitle: title, Message: text, Sender: NetworkingHelper.sharedNetworkManager.appDelegate().presentedViewController!)
+}
 class AlertHelper: NSObject {
     static var loadingView:MBProgressHUD?
     

@@ -6,6 +6,9 @@
 //  Copyright © 2019 Waqas. All rights reserved.
 //
 import UIKit
+import SwiftyJSON
+import Alamofire
+
 class EditAccountInformationVC: UIViewController {
         
     let scroll = UI()
@@ -74,7 +77,8 @@ class EditAccountInformationVC: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         view.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
-            
+        
+        
         //////////////////////////      CREATING SCROLL VIEW        //////////////////////////////////
         scroll.ScrollView(x: 0, y: 0, width: x, height: y-70, bkcolor: #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), contentwidth: x, contentheight: 1380, view: view)
            
@@ -113,11 +117,27 @@ extension EditAccountInformationVC{
      }
          
      @objc func SaveButtonFunc (_: UIButton) -> Void {
-         print("Image")
+        let token = UserDefaults.standard.string(forKey: "Token")
+        let param:Parameters = [
+            "currentPassword": "123",
+            "newPassword": "321"
+        ]
+        let header = ["Authorization": token!,
+            "Content-Type": "application/json"
+        ]
+        Alamofire.request("https://www.dev.conektr.com/index.php/rest/V1/customers/me/password", method: .post, parameters: param, headers: header).responseData { response in
+            switch response.result{
+            case.success(let value):
+                let json = JSON(value)
+                print(json)
+            case.failure(let error):
+                print(error.localizedDescription)
+            }
+        }
      }
          
      @objc func BackButtonFunc (_: UIButton) -> Void {
-            print("Image")
+            print("Change Password2")
         }
          
      @objc func ChoseFileName1 (_ sender: UIButton){
@@ -387,8 +407,6 @@ extension EditAccountInformationVC{
          BackButton.button.frame.origin.y = SaveButton.button.frame.maxY+20
          scroll.scrollview.contentSize.height = BackButton.button.frame.maxY+50
      }
-        
-        
 }
         
         

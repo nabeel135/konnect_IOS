@@ -16,7 +16,7 @@ import SwiftGoogleTranslate
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var presentedViewController:Dashboard?
-
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         IQKeyboardManager.shared.enable = true
                
@@ -25,12 +25,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                manager.requestSerializer = AFJSONRequestSerializer()
                manager.responseSerializer = AFHTTPResponseSerializer()
                let defaults = UserDefaults.standard
-               
+
                if(defaults.bool(forKey: "IsLogined"))
                {
                    manager.saveToken(token: defaults.string(forKey: "Token")!)
 //                self.GetQuote(token: defaults.string(forKey: "Token")!)
-                
+
                }
                else{
                 defaults.set("", forKey: "quoteToken")
@@ -81,11 +81,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         func GetQuoteFailed(task:URLSessionDataTask?, error:Error)
         {
             print(error.localizedDescription)
-    //     let dashboard = NetworkingHelper.sharedNetworkManager.appDelegate().presentedViewController!
-    //     weak var weakSelf = dashboard
-    //
-    //     AlertHelper.hideLoadingView(ForView: weakSelf!.view, Animated: true)
-    //        AlertHelper.showErrorAlert(WithTitle: "Error", Message: error.localizedDescription, Sender: NetworkingHelper.sharedNetworkManager.appDelegate().presentedViewController!)
+         let dashboard = NetworkingHelper.sharedNetworkManager.appDelegate().presentedViewController!
+         weak var weakSelf = dashboard
+    
+         AlertHelper.hideLoadingView(ForView: weakSelf!.view, Animated: true)
+            AlertHelper.showErrorAlert(WithTitle: "Error", Message: error.localizedDescription, Sender: NetworkingHelper.sharedNetworkManager.appDelegate().presentedViewController!)
         }
     
     // MARK: UISceneSession Lifecycle

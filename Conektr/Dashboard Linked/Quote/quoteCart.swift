@@ -137,7 +137,7 @@ class quoteCartVC: UIViewController {
     let quotelist = UI()
     func quotelistUI() {
         quotelist.Label(x: 10, y: header.frame.maxY+20, width: x-20, height: 30, txt: "Item", fontsize: 14, bold: false, cornerRadius: 0, border: 0, borderColor: .clear, alignment: .left, bkcolor: #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), txtcolor: #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), view: body)
-        quotelist.TableView(x: 0, y: quotelist.label.frame.maxY, width: x, height: 200, bkcolor: #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), border: 1, borderColor: #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1), separatorColor: #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), Rows: quotelistobj.count, editing: true, cellheight: 260, CellHeight: {
+        quotelist.TableView(x: 0, y: quotelist.label.frame.maxY, width: x, height: 200, bkcolor: #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), border: 1, borderColor: #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1), separatorColor: #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), Sections: 1, SectionHeight: 0, SectionHEIGHT: {}, sectionView: {}, rows: quotelistobj.count, Rows: {}, editing: true, cellheight: 260, CellHeight: {
         }, Cellview: {
             self.cellView()
         }, onDelete: {
@@ -365,7 +365,7 @@ class quoteCartVC: UIViewController {
         allBrands.disAppear()
         product.disAppear()
         Distributor.disAppear()
-        promotion.disAppear()
+        search.disAppear()
         bodyfor.compare.scrollview.isHidden = true
         bodyfor.quotecart.scrollview.isHidden = true
         bodyfor.submitquote.scrollview.isHidden = false
@@ -378,7 +378,7 @@ class quoteCartVC: UIViewController {
         allBrands.disAppear()
         product.disAppear()
         Distributor.disAppear()
-        promotion.disAppear()
+        search.disAppear()
         bodyfor.compare.scrollview.isHidden = true
         bodyfor.quotecart.scrollview.isHidden = true
         bodyfor.submitquote.scrollview.isHidden = true
@@ -442,7 +442,7 @@ class quoteCartVC: UIViewController {
         allBrands.disAppear()
         product.create(updateQuote: true, view: bodyfor.product.scrollview)
         Distributor.disAppear()
-        promotion.disAppear()
+        search.disAppear()
         bodyfor.compare.scrollview.isHidden = true
         bodyfor.quotecart.scrollview.isHidden = true
         bodyfor.submitquote.scrollview.isHidden = true
@@ -486,7 +486,7 @@ class quoteCartVC: UIViewController {
         allBrands.disAppear()
         product.create(updateQuote: false, view: bodyfor.product.scrollview)
         Distributor.disAppear()
-        promotion.disAppear()
+        search.disAppear()
         bodyfor.compare.scrollview.isHidden = true
         bodyfor.quotecart.scrollview.isHidden = true
         bodyfor.submitquote.scrollview.isHidden = true

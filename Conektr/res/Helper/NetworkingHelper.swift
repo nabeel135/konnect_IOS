@@ -18,6 +18,7 @@
             case SuccessFailed
             case NilValue
         }
+        
         static var webAPIURL = "http://www.dev.conektr.com/"
         static var sharedNetworkManager:NetworkingHelper = NetworkingHelper(url: URL(string: webAPIURL))
         
@@ -25,10 +26,6 @@
         {
             super.init(baseURL: url, sessionConfiguration: nil)
             
-            
-            //Implement the below two
-            //        self.responseSerializer
-            //        self.requestSerializer
         }
         
         required init?(coder aDecoder: NSCoder)
@@ -49,6 +46,7 @@
         {
             
             self.post("VerifyToken", parameters: parameters!, progress: nil, success: success , failure: failure)
+            
         }
         
         
@@ -81,6 +79,7 @@
         // MARK: - Login
         func CustomerLogin(withParameters parameters: AnyObject?, successBlock success:((URLSessionDataTask, Any?) -> Void)?, failureBlock failure:((URLSessionDataTask?, Error) -> Void)?)
         {
+            
             //print(self.baseURL!)
             self.post("index.php/rest/V1/integration/customer/token", parameters: parameters!, progress: nil, success: success , failure: failure )
         }
@@ -117,6 +116,8 @@
         func GetCartItems(withParameters parameters: String, successBlock success:((URLSessionDataTask, Any?) -> Void)?, failureBlock failure:((URLSessionDataTask?, Error) -> Void)?)
         {
             //            //print(self.baseURL!)
+            //                        http://dev.conektr.com/get_qoute_cart.php?token=Of4ZRqXe34jdCPJ6NsawhK5Eui2nrqrD
+
             self.get(parameters, parameters: nil, progress: nil, success: success , failure: failure )
         }
         
@@ -245,6 +246,11 @@
             self.get(urlString, parameters: nil, progress: nil, success: success , failure: failure )
         }
         
+        func ChangePassword(withParameters parameters: AnyObject?, successBlock success:((URLSessionDataTask, Any?) -> Void)?, failureBlock failure:((URLSessionDataTask?, Error) -> Void)?)
+        {
+            //            //print(self.baseURL!)
+            self.post("/index.php/rest/V1/customers/me/password", parameters: parameters!, progress: nil, success: success , failure: failure )
+        }
         
         
         func saveToken(token:String)

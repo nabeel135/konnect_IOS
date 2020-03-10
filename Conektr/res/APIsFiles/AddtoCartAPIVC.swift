@@ -8,7 +8,6 @@
 
 import UIKit
 
-
 class AddtoCartAPIVC {
 
     var item:CartDatum?
@@ -27,20 +26,16 @@ class AddtoCartAPIVC {
 //        print(parameters)
         
         // 2
-        
-        
         let manager = NetworkingHelper.sharedNetworkManager
         
         manager.AddItemtoCart(withParameters: parameters as AnyObject, successBlock: GetSucceeded, failureBlock: GetFailed)
     }
-    
         func GetSucceeded(task:URLSessionDataTask, responseObject:Any?)
         {
             if responseObject == nil
             {
                 return
             }
-            
             do{
                 AlertHelper.showSuccessAlert(WithTitle: "Success", Message: "Sucessfully Added", Sender: NetworkingHelper.sharedNetworkManager.appDelegate().presentedViewController!)
                 let decoder = JSONDecoder()
@@ -53,7 +48,6 @@ class AddtoCartAPIVC {
                     
                 }
             }
-            
             func GetFailed(task:URLSessionDataTask?, error:Error)
             {
                 if error.localizedDescription == "Request failed: unauthorized (401)"

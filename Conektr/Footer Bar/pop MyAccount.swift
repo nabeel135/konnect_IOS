@@ -59,6 +59,7 @@ class map: UIView {
             myAccountpop.signInbtn.Button(x: 20, y: myAccountpop.pass.txtfield.frame.maxY+10, width: x-40, height: 40, title: "SIGN IN", fontsize: 12, any: any, function: signinBtn, cornerRadius: 20, bordercolor: #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1), bkcolor: #colorLiteral(red: 0.4388002753, green: 0.2797730267, blue: 0.6211301684, alpha: 1), txtcolor: #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), view: myAccountpop.obj.view)
             myAccountpop.newAccountbtn.Label(x: 0, y: myAccountpop.signInbtn.button.frame.maxY+10, width: x, height: 50, txt: "or", fontsize: 12, bold: false, cornerRadius: 0, border: 0, borderColor: .clear, alignment: .center, bkcolor: .clear, txtcolor: #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), view: myAccountpop.obj.view)
             myAccountpop.newAccountbtn.Button(x: 20, y: myAccountpop.newAccountbtn.label.frame.maxY+10, width: x-40, height: 40, title: "CREATE AN ACCOUNT", fontsize: 12, any: any, function: createAccountBtn, cornerRadius: 20, bordercolor: .clear, bkcolor: #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), txtcolor: #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), view: myAccountpop.obj.view)
+            
             myAccountpop.forgotpassbtn.Button(x: 20, y: myAccountpop.newAccountbtn.button.frame.maxY+10, width: x-20, height: 40, title: "Forgot Your Password?", fontsize: 12, any: any, function: forgotpassBtn, cornerRadius: 0, bordercolor: .clear, bkcolor: .clear, txtcolor: #colorLiteral(red: 0, green: 0.5898008943, blue: 1, alpha: 1), view: myAccountpop.obj.view)
             
             myAccountpop.obj.view.frame.size.height = myAccountpop.forgotpassbtn.button.frame.maxY+40
@@ -182,14 +183,37 @@ class map: UIView {
     /////////////////////////////////////////////
     @objc func myaccountbtn(_ btn:UIButton){
         myAccountpop.disAppear()
-        addchildview(parent: NetworkingHelper.sharedNetworkManager.appDelegate().presentedViewController!, child: MYAccount(), view: bodyfor.myaccount.scrollview)
-
+        
+        
+        // footerBar linked pages
+        search.disAppear()
+        
+        shoppingCart.disAppear()
+        Checkout.disAppear()
+        
+        SignIn.disAppear()
+        bodyfor.CreateAccount.scrollview.isHidden = true
+        bodyfor.forgotPassword.scrollview.isHidden = true
+        
         bodyfor.myaccount.scrollview.isHidden = false
+        bodyfor.changepass.scrollview.isHidden = true
         bodyfor.Editaccount.scrollview.isHidden = true
-        bodyfor.Editaddress.scrollview.isHidden = true
         bodyfor.addressbook.scrollview.isHidden = true
+        bodyfor.Editaddress.scrollview.isHidden = true
+        bodyfor.addaddress.scrollview.isHidden = true
+        
         bodyfor.orderlist.scrollview.isHidden = true
+        bodyfor.orderdetail.scrollview.isHidden = true
+        
         bodyfor.shoplist.scrollview.isHidden = true
+        bodyfor.reorder.scrollview.isHidden = true
+        
+        bodyfor.quotelist.scrollview.isHidden = true
+        bodyfor.quotedetial.scrollview.isHidden = true
+
+        addchildview(parent: NetworkingHelper.sharedNetworkManager.appDelegate().presentedViewController!, child: storyboardView(boardName: "main", pageID: "myaccountVC"), view: bodyfor.myaccount.scrollview)
+        
+        /*------------- code form here --------------*/
 
 
     }
@@ -199,12 +223,37 @@ class map: UIView {
     /////////////////////////////////////////////
     @objc func accountInFobtn(_ btn:UIButton){
         myAccountpop.disAppear()
+        
+        
+        // footerBar linked pages
+        search.disAppear()
+        
+        shoppingCart.disAppear()
+        Checkout.disAppear()
+        
+        SignIn.disAppear()
+        bodyfor.CreateAccount.scrollview.isHidden = true
+        bodyfor.forgotPassword.scrollview.isHidden = true
+        
         bodyfor.myaccount.scrollview.isHidden = true
+        bodyfor.changepass.scrollview.isHidden = true
         bodyfor.Editaccount.scrollview.isHidden = false
-        bodyfor.Editaddress.scrollview.isHidden = true
         bodyfor.addressbook.scrollview.isHidden = true
+        bodyfor.Editaddress.scrollview.isHidden = true
+        bodyfor.addaddress.scrollview.isHidden = true
+        
         bodyfor.orderlist.scrollview.isHidden = true
+        bodyfor.orderdetail.scrollview.isHidden = true
+        
         bodyfor.shoplist.scrollview.isHidden = true
+        bodyfor.reorder.scrollview.isHidden = true
+        
+        bodyfor.quotelist.scrollview.isHidden = true
+        bodyfor.quotedetial.scrollview.isHidden = true
+
+        addchildview(parent: NetworkingHelper.sharedNetworkManager.appDelegate().presentedViewController!, child: EditAccountInformationVC(), view: bodyfor.Editaccount.scrollview)
+        
+        /*------------- code form here --------------*/
 
 
     }
@@ -214,14 +263,38 @@ class map: UIView {
     /////////////////////////////////////////////
     @objc func addressbookbtn(_ btn:UIButton){
         myAccountpop.disAppear()
+        
+        
+        // footerBar linked pages
+        search.disAppear()
+        
+        shoppingCart.disAppear()
+        Checkout.disAppear()
+        
+        SignIn.disAppear()
+        bodyfor.CreateAccount.scrollview.isHidden = true
+        bodyfor.forgotPassword.scrollview.isHidden = true
+        
         bodyfor.myaccount.scrollview.isHidden = true
+        bodyfor.changepass.scrollview.isHidden = true
         bodyfor.Editaccount.scrollview.isHidden = true
-        bodyfor.Editaddress.scrollview.isHidden = true
         bodyfor.addressbook.scrollview.isHidden = false
+        bodyfor.Editaddress.scrollview.isHidden = true
+        bodyfor.addaddress.scrollview.isHidden = true
+        
         bodyfor.orderlist.scrollview.isHidden = true
+        bodyfor.orderdetail.scrollview.isHidden = true
+        
         bodyfor.shoplist.scrollview.isHidden = true
+        bodyfor.reorder.scrollview.isHidden = true
+        
+        bodyfor.quotelist.scrollview.isHidden = true
+        bodyfor.quotedetial.scrollview.isHidden = true
 
-
+        addchildview(parent: NetworkingHelper.sharedNetworkManager.appDelegate().presentedViewController!, child: AddressBookVC(), view: bodyfor.addressbook.scrollview)
+        
+        /*------------- code form here --------------*/
+        
     }
     ///////////////////////////////////////////////
     //////////////////////////////////////////////
@@ -229,13 +302,38 @@ class map: UIView {
     /////////////////////////////////////////////
     @objc func myordersbtn(_ btn:UIButton){
         myAccountpop.disAppear()
+        
+        
+        // footerBar linked pages
+        search.disAppear()
+        
+        shoppingCart.disAppear()
+        Checkout.disAppear()
+        
+        SignIn.disAppear()
+        bodyfor.CreateAccount.scrollview.isHidden = true
+        bodyfor.forgotPassword.scrollview.isHidden = true
+        
         bodyfor.myaccount.scrollview.isHidden = true
+        bodyfor.changepass.scrollview.isHidden = true
         bodyfor.Editaccount.scrollview.isHidden = true
-        bodyfor.Editaddress.scrollview.isHidden = true
         bodyfor.addressbook.scrollview.isHidden = true
+        bodyfor.Editaddress.scrollview.isHidden = true
+        bodyfor.addaddress.scrollview.isHidden = true
+        
         bodyfor.orderlist.scrollview.isHidden = false
+        bodyfor.orderdetail.scrollview.isHidden = true
+        
         bodyfor.shoplist.scrollview.isHidden = true
+        bodyfor.reorder.scrollview.isHidden = true
+        
+        bodyfor.quotelist.scrollview.isHidden = true
+        bodyfor.quotedetial.scrollview.isHidden = true
 
+        addchildview(parent: NetworkingHelper.sharedNetworkManager.appDelegate().presentedViewController!, child: orderlistVC(), view: bodyfor.orderlist.scrollview)
+        
+        /*------------- code form here --------------*/
+        
     }
     ///////////////////////////////////////////////
     //////////////////////////////////////////////
@@ -243,19 +341,76 @@ class map: UIView {
     /////////////////////////////////////////////
     @objc func myshoplistbtn(_ btn:UIButton){
         myAccountpop.disAppear()
+        
+        
+        // footerBar linked pages
+        search.disAppear()
+        
+        shoppingCart.disAppear()
+        Checkout.disAppear()
+        
+        SignIn.disAppear()
+        bodyfor.CreateAccount.scrollview.isHidden = true
+        bodyfor.forgotPassword.scrollview.isHidden = true
+        
         bodyfor.myaccount.scrollview.isHidden = true
+        bodyfor.changepass.scrollview.isHidden = true
         bodyfor.Editaccount.scrollview.isHidden = true
-        bodyfor.Editaddress.scrollview.isHidden = true
         bodyfor.addressbook.scrollview.isHidden = true
+        bodyfor.Editaddress.scrollview.isHidden = true
+        bodyfor.addaddress.scrollview.isHidden = true
+        
         bodyfor.orderlist.scrollview.isHidden = true
+        bodyfor.orderdetail.scrollview.isHidden = true
+        
         bodyfor.shoplist.scrollview.isHidden = false
+        bodyfor.reorder.scrollview.isHidden = true
+        
+        bodyfor.quotelist.scrollview.isHidden = true
+        bodyfor.quotedetial.scrollview.isHidden = true
+
+        addchildview(parent: NetworkingHelper.sharedNetworkManager.appDelegate().presentedViewController!, child: shoplistVC(), view: bodyfor.shoplist.scrollview)
+        
+        /*------------- code form here --------------*/
+        
     }
     ///////////////////////////////////////////////
     //////////////////////////////////////////////
     /////////// BUTTON reorder product
     /////////////////////////////////////////////
     @objc func reorderbtn(_ btn:UIButton){
-        print("re order")
+        myAccountpop.disAppear()
+        
+        
+        // footerBar linked pages
+        search.disAppear()
+        
+        shoppingCart.disAppear()
+        Checkout.disAppear()
+        
+        SignIn.disAppear()
+        bodyfor.CreateAccount.scrollview.isHidden = true
+        bodyfor.forgotPassword.scrollview.isHidden = true
+        
+        bodyfor.myaccount.scrollview.isHidden = true
+        bodyfor.changepass.scrollview.isHidden = true
+        bodyfor.Editaccount.scrollview.isHidden = true
+        bodyfor.addressbook.scrollview.isHidden = true
+        bodyfor.Editaddress.scrollview.isHidden = true
+        bodyfor.addaddress.scrollview.isHidden = true
+        
+        bodyfor.orderlist.scrollview.isHidden = true
+        bodyfor.orderdetail.scrollview.isHidden = true
+        
+        bodyfor.shoplist.scrollview.isHidden = true
+        bodyfor.reorder.scrollview.isHidden = false
+        
+        bodyfor.quotelist.scrollview.isHidden = true
+        bodyfor.quotedetial.scrollview.isHidden = true
+
+        addchildview(parent: NetworkingHelper.sharedNetworkManager.appDelegate().presentedViewController!, child: storyboardView(boardName: "reorderVC", pageID: "reorderVC"), view: bodyfor.reorder.scrollview)
+        
+        /*------------- code form here --------------*/
     }
     ///////////////////////////////////////////////
     //////////////////////////////////////////////
@@ -276,7 +431,39 @@ class map: UIView {
     /////////// BUTTON MY quote
     /////////////////////////////////////////////
     @objc func myquotebtn(_ btn:UIButton){
-        print("my quote")
+        myAccountpop.disAppear()
+        
+        
+        // footerBar linked pages
+        search.disAppear()
+        
+        shoppingCart.disAppear()
+        Checkout.disAppear()
+        
+        SignIn.disAppear()
+        bodyfor.CreateAccount.scrollview.isHidden = true
+        bodyfor.forgotPassword.scrollview.isHidden = true
+        
+        bodyfor.myaccount.scrollview.isHidden = true
+        bodyfor.changepass.scrollview.isHidden = true
+        bodyfor.Editaccount.scrollview.isHidden = true
+        bodyfor.addressbook.scrollview.isHidden = true
+        bodyfor.Editaddress.scrollview.isHidden = true
+        bodyfor.addaddress.scrollview.isHidden = true
+        
+        bodyfor.orderlist.scrollview.isHidden = true
+        bodyfor.orderdetail.scrollview.isHidden = true
+        
+        bodyfor.shoplist.scrollview.isHidden = true
+        bodyfor.reorder.scrollview.isHidden = true
+        
+        bodyfor.quotelist.scrollview.isHidden = false
+        bodyfor.quotedetial.scrollview.isHidden = true
+
+        addchildview(parent: NetworkingHelper.sharedNetworkManager.appDelegate().presentedViewController!, child: storyboardView(boardName: "quotelistVC", pageID: "quotelistVCViewController"), view: bodyfor.quotelist.scrollview)
+        
+        /*------------- code form here --------------*/
+        
     }
     ///////////////////////////////////////////////
     //////////////////////////////////////////////

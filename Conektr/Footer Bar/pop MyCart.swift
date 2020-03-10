@@ -30,6 +30,11 @@ class mcp: UIView {
     var pviewCarBtn:Selector!
     var pcheckoutBtn:Selector!
     
+    
+    
+    
+    // MARK:- CREATE
+    
     func Create(any:Any,viewCartBtn:Selector,checkoutBtn:Selector,view:UIView) {
         
 //        let cartApi = GetCartAPIVC()
@@ -58,9 +63,7 @@ class mcp: UIView {
         myCartpop.Appear()
     }
     
-    @objc func crossButton(){
-        myCartpop.disAppear()
-    }
+    
     
     func Appear() {
         Searchpop.body.view.frame.origin.y = y-70
@@ -86,53 +89,8 @@ class mcp: UIView {
     
     
     
-    @objc func cartproductButton(_ tap:UITapGestureRecognizer){
-        print("ptitle btn: \(tap.view!.tag)")
-    }
-    let msg = UI()
-
-    @objc func cartDelButton(_ btn:UIButton){
-//        msg.optionMessagebox(txt: "Are you sure you would like to remove this item from cart?",
-//                             any: myCartpop,
-//                             okfunction: #selector(myCartpop.deleteproduct(_:)),
-//                             cancelfunction: #selector(myCartpop.canceldeleteproduct(_:)), view: myCartpop.parentview)
-        
-        let cartitem = cartobj.filter{$0.id == btn.tag}.first
-        let alertController:UIAlertController = UIAlertController(title: "Confirmation", message: "Are you sure you would like to remove this item from cart?", preferredStyle: .alert)
-        
-        let okAction:UIAlertAction = UIAlertAction(title: "Yes", style: .default, handler: {(alert:UIAlertAction) in
-            
-            let delapi = DeleteCartAPIVC()
-            delapi.item = cartitem
-            delapi.DeleteCart()
-           return
-        })
-        
-        let cancelAction:UIAlertAction = UIAlertAction(title: "Cancel", style: .default, handler: {(alert:UIAlertAction) in
-            
-            return
-        })
-        
-        alertController.addAction(okAction)
-        alertController.addAction(cancelAction)
-        
-        NetworkingHelper.sharedNetworkManager.appDelegate().presentedViewController!.present(alertController, animated: true, completion: nil)
-//        self.present(alertController, animated: true, completion: nil)
-        
-        
-        
-    }
-    @objc func deleteproduct(_ btn:UIButton){
-        msg.msgbox.isHidden = true
-        print("product delete")
-    }
-    @objc func canceldeleteproduct(_ btn:UIButton){
-        msg.msgbox.isHidden = true
-    }
     
-    
-    
-    
+    // MARK:- CART LIST
     func updateCartlist(){
         var top = myCartpop.viewcartbtn[0].button.frame.maxY+10
         var total:Double = 0.0
@@ -167,7 +125,7 @@ class mcp: UIView {
                 myCartpop.pview[myCartpop.pview.count-1].view.tag = obj.id
                 myCartpop.pview[myCartpop.pview.count-1].view.addGestureRecognizer(UITapGestureRecognizer(target: myCartpop, action: #selector(myCartpop.cartproductButton(_:))))
                 top+=150
-                myCartpop.pimg[myCartpop.pimg.count-1].Image(x: 10, y: 10, width: 120, height: 120, mode: .scaleAspectFit, src: obj.imag, view: myCartpop.pview[myCartpop.pview.count-1].view, imageUrl: nil)
+                myCartpop.pimg[myCartpop.pimg.count-1].Image(x: 10, y: 10, width: 120, height: 120, mode: .scaleAspectFit, src: obj.imag, view: myCartpop.pview[myCartpop.pview.count-1].view, imageUrl: obj.imgUrl)
                 myCartpop.ptitle[myCartpop.ptitle.count-1].Label(x: myCartpop.pimg[myCartpop.pimg.count-1].imag.frame.maxX, y: 10, width: x-140, height: 50, txt: obj.title, fontsize: 18, bold: false, cornerRadius: 0, border: 0, borderColor: .clear, alignment: .left, bkcolor: .clear, txtcolor: #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), view: myCartpop.pview[myCartpop.pview.count-1].view)
                 myCartpop.pprice[myCartpop.pprice.count-1].Label(x: myCartpop.pimg[myCartpop.pimg.count-1].imag.frame.maxX, y: myCartpop.ptitle[myCartpop.ptitle.count-1].label.frame.maxY, width: 150, height: 30, txt: "AED\(obj.price)", fontsize: 16, bold: false, cornerRadius: 0, border: 0, borderColor: .clear, alignment: .left, bkcolor: .clear, txtcolor: #colorLiteral(red: 0.7450980544, green: 0.1568627506, blue: 0.07450980693, alpha: 1), view: myCartpop.pview[myCartpop.pview.count-1].view)
                 myCartpop.pquantity[myCartpop.pquantity.count-1].Label(x: myCartpop.pimg[myCartpop.pimg.count-1].imag.frame.maxX, y: myCartpop.pprice[myCartpop.pprice.count-1].label.frame.maxY, width: 150, height: 40, txt: "Qty: \(obj.quantity)", fontsize: 16, bold: false, cornerRadius: 0, border: 0, borderColor: .clear, alignment: .left, bkcolor: .clear, txtcolor: #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), view: myCartpop.pview[myCartpop.pview.count-1].view)
@@ -187,6 +145,69 @@ class mcp: UIView {
         }
         
     }
+    
+    
+    
+    // MARK:- BUTTONS
+    @objc func deleteproduct(_ btn:UIButton){
+        msg.msgbox.isHidden = true
+        print("product delete")
+    }
+    
+    @objc func canceldeleteproduct(_ btn:UIButton){
+        msg.msgbox.isHidden = true
+    }
+    
+    @objc func cartproductButton(_ tap:UITapGestureRecognizer){
+        print("ptitle btn: \(tap.view!.tag)")
+        cartobj.filter{$0.id == tap.view!.tag}.first.map{
+            print($0.id)
+            print($0.name)
+            print($0.productType)
+        }
+        
+    }
+    let msg = UI()
+    @objc func crossButton(){
+        myCartpop.disAppear()
+    }
+    @objc func cartDelButton(_ btn:UIButton){
+//        msg.optionMessagebox(txt: "Are you sure you would like to remove this item from cart?",
+//                             any: myCartpop,
+//                             okfunction: #selector(myCartpop.deleteproduct(_:)),
+//                             cancelfunction: #selector(myCartpop.canceldeleteproduct(_:)), view: myCartpop.parentview)
+        
+        let cartitem = cartobj.filter{$0.id == btn.tag}.first
+        let alertController:UIAlertController = UIAlertController(title: "Confirmation", message: "Are you sure you would like to remove this item from cart?", preferredStyle: .alert)
+        
+        let okAction:UIAlertAction = UIAlertAction(title: "Yes", style: .default, handler: {(alert:UIAlertAction) in
+            
+            let delapi = DeleteCartAPIVC()
+            delapi.item = cartitem
+            delapi.DeleteCart()
+           return
+        })
+        
+        let cancelAction:UIAlertAction = UIAlertAction(title: "Cancel", style: .default, handler: {(alert:UIAlertAction) in
+            
+            return
+        })
+        
+        alertController.addAction(okAction)
+        alertController.addAction(cancelAction)
+        
+        NetworkingHelper.sharedNetworkManager.appDelegate().presentedViewController!.present(alertController, animated: true, completion: nil)
+//        self.present(alertController, animated: true, completion: nil)
+        
+        
+        
+    }
+    
+    
+    
+    
+    
+    
     
     
     

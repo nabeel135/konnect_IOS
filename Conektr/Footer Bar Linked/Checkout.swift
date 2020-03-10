@@ -67,7 +67,7 @@
                                       "city": shipaddresdata.city!,
                                       "firstname": shipaddresdata.firstname!,
                                       "lastname": shipaddresdata.lastname!,
-                                      "email": customer.email!,
+                                      "email": custDetailModel?.email ?? "",
                                       "prefix": "address_",
                                       "region_code": shipaddresdata.region!.regionCode!,
                                       "sameAsBilling": Checkout.review.isCheckBoxChecked ? 1 : 0] as [String : Any]
@@ -84,7 +84,7 @@
                 "city": shipaddresdata.city!,
                 "firstname": shipaddresdata.firstname!,
                 "lastname": shipaddresdata.lastname!,
-                "email": customer.email!,
+                "email": custDetailModel?.email ?? "",
                 "prefix": "address_",
                 "region_code": shipaddresdata.region!.regionCode!] as [String : Any]
             }

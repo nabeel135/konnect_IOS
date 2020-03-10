@@ -119,13 +119,15 @@ class si: UIView {
         myAccountpop.disAppear()
                
         // footerBar linked pages
-        searchResult.disAppear()
+        search.disAppear()
         shoppingCart.disAppear()
         Checkout.disAppear()
         SignIn.disAppear()
         bodyfor.CreateAccount.scrollview.isHidden = true
         
-        forgotpassword.Create(view: bodyfor.forgotPassword.scrollview)
+        bodyfor.forgotPassword.scrollview.isHidden = false
+        addchildview(parent: NetworkingHelper.sharedNetworkManager.appDelegate().presentedViewController!, child: storyboardView(boardName: "forgotpass", pageID: "forgotpassVC"), view: bodyfor.forgotPassword.scrollview)
+
     }
     
     /////////////////////////////////////////////////////
@@ -137,7 +139,7 @@ class si: UIView {
         myAccountpop.disAppear()
                
         // footerBar linked pages
-        searchResult.disAppear()
+        search.disAppear()
         shoppingCart.disAppear()
         Checkout.disAppear()
         SignIn.disAppear()

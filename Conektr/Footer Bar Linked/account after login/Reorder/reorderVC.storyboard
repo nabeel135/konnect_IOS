@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--ReorderVC-->
+        <scene sceneID="ZzK-eR-Ggz">
+            <objects>
+                <viewController storyboardIdentifier="reorderVC" id="Kgr-tW-Nzv" customClass="reorderVC" customModule="Conektr" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="chD-zY-J8r">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ogH-ti-tmR">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mht-Dq-poU">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="60"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="REORDER PRODUCT" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JEw-JY-Mhh">
+                                                <rect key="frame" x="10" y="0.0" width="152" height="50"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="50" id="Qjo-gT-0Gx"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IAG-Jf-b6C">
+                                                <rect key="frame" x="364" y="5" width="30" height="40"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="40" id="3yz-mo-DnZ"/>
+                                                    <constraint firstAttribute="width" constant="30" id="uzg-dq-IIK"/>
+                                                </constraints>
+                                                <state key="normal" image="quote"/>
+                                                <connections>
+                                                    <action selector="quoteBUTTON:" destination="Kgr-tW-Nzv" eventType="touchUpInside" id="Yw2-5w-Xnk"/>
+                                                </connections>
+                                            </button>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oZk-eE-dct">
+                                                <rect key="frame" x="0.0" y="50" width="414" height="1"/>
+                                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="1" id="OaP-4F-Pa6"/>
+                                                </constraints>
+                                            </view>
+                                        </subviews>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                        <constraints>
+                                            <constraint firstItem="JEw-JY-Mhh" firstAttribute="top" secondItem="mht-Dq-poU" secondAttribute="top" id="E6x-DT-maP"/>
+                                            <constraint firstItem="IAG-Jf-b6C" firstAttribute="top" secondItem="mht-Dq-poU" secondAttribute="top" constant="5" id="TpF-Ha-1Vc"/>
+                                            <constraint firstAttribute="trailing" secondItem="oZk-eE-dct" secondAttribute="trailing" id="Y6B-Qc-UA9"/>
+                                            <constraint firstItem="oZk-eE-dct" firstAttribute="leading" secondItem="mht-Dq-poU" secondAttribute="leading" id="f7a-Zl-7jQ"/>
+                                            <constraint firstItem="oZk-eE-dct" firstAttribute="top" secondItem="JEw-JY-Mhh" secondAttribute="bottom" id="gPz-SC-6Yl"/>
+                                            <constraint firstAttribute="height" constant="60" id="gyW-XV-bbI"/>
+                                            <constraint firstAttribute="trailing" secondItem="IAG-Jf-b6C" secondAttribute="trailing" constant="20" id="h5w-xT-uSp"/>
+                                            <constraint firstItem="JEw-JY-Mhh" firstAttribute="leading" secondItem="mht-Dq-poU" secondAttribute="leading" constant="10" id="udz-4S-cYi"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="mht-Dq-poU" firstAttribute="leading" secondItem="xhN-Gg-YwQ" secondAttribute="leading" id="1Hx-a8-hdm"/>
+                                    <constraint firstItem="xhN-Gg-YwQ" firstAttribute="trailing" secondItem="mht-Dq-poU" secondAttribute="trailing" id="A0o-Yp-1bf"/>
+                                    <constraint firstItem="mht-Dq-poU" firstAttribute="top" secondItem="xhN-Gg-YwQ" secondAttribute="top" id="db0-jt-6Ct"/>
+                                </constraints>
+                                <viewLayoutGuide key="contentLayoutGuide" id="Pbp-JL-LBL"/>
+                                <viewLayoutGuide key="frameLayoutGuide" id="xhN-Gg-YwQ"/>
+                            </scrollView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="ogH-ti-tmR" firstAttribute="top" secondItem="chD-zY-J8r" secondAttribute="top" id="alM-yI-fnC"/>
+                            <constraint firstAttribute="bottom" secondItem="ogH-ti-tmR" secondAttribute="bottom" constant="70" id="bXg-bv-z2s"/>
+                            <constraint firstItem="ogH-ti-tmR" firstAttribute="leading" secondItem="Hay-w2-z4W" secondAttribute="leading" id="hSP-ob-wzM"/>
+                            <constraint firstItem="ogH-ti-tmR" firstAttribute="trailing" secondItem="Hay-w2-z4W" secondAttribute="trailing" id="yzm-ZL-PQ5"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="Hay-w2-z4W"/>
+                    </view>
+                    <size key="freeformSize" width="414" height="896"/>
+                    <connections>
+                        <outlet property="body" destination="ogH-ti-tmR" id="bHT-Zb-H1i"/>
+                        <outlet property="header" destination="mht-Dq-poU" id="Fvz-s9-clv"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="tpr-hf-qG1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-110.14492753623189" y="98.4375"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="quote" width="75" height="94"/>
+    </resources>
+</document>

@@ -236,7 +236,7 @@ class shoplistVC: UIViewController {
             deletepage.Button(x: x-100, y: buttonscroll.scrollview.frame.maxY, width: 100, height: 30, title: "Remove Page", fontsize: 12, any: self, function: #selector(removepage), cornerRadius: 2, bordercolor: .clear, bkcolor: #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), txtcolor: #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), view: body.scrollview)
             
             // TableView
-            product.TableView(x: 0, y: buttonscroll.scrollview.frame.maxY+30, width: x, height: 500, bkcolor: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), border: 1, borderColor: #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1), separatorColor: #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), Rows: obj.count, editing: true, cellheight: 500, CellHeight: {
+            product.TableView(x: 0, y: buttonscroll.scrollview.frame.maxY+30, width: x, height: 500, bkcolor: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), border: 1, borderColor: #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1), separatorColor: #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), Sections: 1, SectionHeight: 0, SectionHEIGHT: {}, sectionView: {}, rows: obj.count, Rows: {}, editing: true, cellheight: 500, CellHeight: {
                 
             }, Cellview: {
                 self.product.tableDelegate.cell.backgroundColor = .clear

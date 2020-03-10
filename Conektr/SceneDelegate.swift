@@ -18,7 +18,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowscene = (scene as? UIWindowScene) else { return }
         window = UIWindow(frame: windowscene.coordinateSpace.bounds)
         window?.windowScene = windowscene
-        window?.rootViewController = Dashboard()
+        
+        if UserDefaults.standard.bool(forKey: "isSplashOpened") {
+            window?.rootViewController = Dashboard()
+            
+        }else{
+            window?.rootViewController = splashVC()
+        }
         window?.makeKeyAndVisible()
     }
     

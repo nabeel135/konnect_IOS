@@ -36,6 +36,51 @@ class CustomDetailAPIVC: UIViewController {
                         
                         custDetailModel = array;
                         
+                        shippingAddress.removeAll()
+                        
+                        for addres in array.addresses ?? []
+                        {
+                            billingAddObj.append(addres)
+                            let sa1:sa = sa()
+                            sa1.l1 = (addres.firstname ?? "") + (addres.lastname ?? "")
+                            sa1.l2 = addres.city ?? ""
+                            sa1.l5 = addres.telephone ?? "N/A"
+                            sa1.l3 = "\(addres.city ?? ""), \(addres.region?.region ?? ""), \(addres.postcode ?? "")"
+                            sa1.l4 = countriesandregionObj?.filter{$0.id == addres.countryID}.first?.fullNameEnglish ?? "N/A"
+                            sa1.id = addres.id!
+                            if(addres.defaultShipping == true && addres.defaultBilling == true)
+                            {
+                                sa1.isselected = true
+                                
+                            }
+                            else
+                            {
+                                sa1.isselected = false
+                            }
+                            shippingAddress.append(sa1)
+                        }
+                        
+                        
+//                        for obj in array.addresses ?? []
+//                        {
+//                            let sa1 = sa()
+//                            sa1.id = obj.id ?? 0
+//                            sa1.l1 = (obj.firstname ?? "") + (obj.lastname ?? "")
+//                            sa1.l2 = obj.company ?? ""
+//                            sa1.l3 = obj.city ?? ""
+//                            sa1.l4 = "\(obj.city ?? ""), \(obj.region?.region ?? ""), \(obj.postcode ?? "")"
+//                            sa1.l5 = countriesandregionObj?.filter{$0.twoLetterAbbreviation == obj.countryID}.map{($0.fullNameEnglish ?? "")}.first ?? ""
+//                            if(obj.defaultShipping ?? false)
+//                            {
+//                                sa1.isselected = true
+//                            }
+//                            else
+//                            {
+//                                sa1.isselected = false
+//                            }
+//                            shippingAddress.append(sa1)
+//                        }
+//                        billingAddObj = array.addresses ?? []
                         GetPaymentMethods()
                         
                         

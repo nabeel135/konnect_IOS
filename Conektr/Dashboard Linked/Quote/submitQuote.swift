@@ -22,7 +22,7 @@ class submitquoteVC: UIViewController {
         allBrands.disAppear()
         product.disAppear()
         Distributor.disAppear()
-        promotion.disAppear()
+        search.disAppear()
         bodyfor.compare.scrollview.isHidden = true
         bodyfor.quotecart.scrollview.isHidden = true
         bodyfor.submitquote.scrollview.isHidden = true

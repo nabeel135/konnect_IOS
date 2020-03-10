@@ -44,6 +44,7 @@ class qp: UIView {
         quotepop.totallable.Label(x: quotepop.countlabel.label.frame.maxX, y: 40, width: (scroll.scrollview.frame.size.width-20)/2, height: 20, txt: "Cart SubTotal:", fontsize: 12, bold: false, cornerRadius: 0, border: 0, borderColor: .clear, alignment: .right, bkcolor: .clear, txtcolor: #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), view: quotepop.scroll.scrollview)
         quotepop.total.Label(x: quotepop.countlabel.label.frame.maxX, y: 60, width: (scroll.scrollview.frame.size.width-20)/2, height: 40, txt: "AED\(totalprice)", fontsize: 14, bold: false, cornerRadius: 0, border: 0, borderColor: .clear, alignment: .right, bkcolor: .clear, txtcolor: #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1), view: quotepop.scroll.scrollview)
         quotepop.quotecartbtn.Button(x: 10, y: 100, width: quotepop.scroll.scrollview.frame.size.width-20, height: 40, title: "MY QUOTE CART", fontsize: 12, any: quotepop, function: #selector(quotepop.myquoteCartBUTTON), cornerRadius: 5, bordercolor: .clear, bkcolor: #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), txtcolor: #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), view: quotepop.scroll.scrollview)
+        
         quotepop.quoteList()
         
         let quoteVC = AddtoQuoteAPIVC()
@@ -80,13 +81,14 @@ class qp: UIView {
 //        quotelistobj[quotelistobj.count-1].price = 12.213+Double(quotelistobj.count)
 //        quotelistobj[quotelistobj.count-1].quantity = 4+quotelistobj.count
         
-        quotepop.list.TableView(x: 0, y: quotepop.header.view.frame.maxY, width: quotepop.scroll.scrollview.frame.size.width, height: quotepop.scroll.scrollview.frame.size.height-quotepop.header.view.frame.maxY, bkcolor: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), border: 1, borderColor: #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1), separatorColor: #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1), Rows: quotelistobj.count, editing: true, cellheight: 130, CellHeight: {
+        quotepop.list.TableView(x: 0, y: quotepop.header.view.frame.maxY, width: quotepop.scroll.scrollview.frame.size.width, height: quotepop.scroll.scrollview.frame.size.height-quotepop.header.view.frame.maxY, bkcolor: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), border: 1, borderColor: #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1), separatorColor: #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1), Sections: 1, SectionHeight: 0, SectionHEIGHT: {}, sectionView: {}, rows: quotelistobj.count, Rows: {}, editing: true, cellheight: 130, CellHeight: {
             
         }, Cellview: {
             quotepop.cellView()
         }, onDelete: {
             quotepop.ondelcell()
         }, view: quotepop.scroll.scrollview)
+        
         quotepop.list.table.reloadData()
     }
     
@@ -143,7 +145,7 @@ class qp: UIView {
         allBrands.disAppear()
         product.disAppear()
         Distributor.disAppear()
-        promotion.disAppear()
+        search.disAppear()
         bodyfor.compare.scrollview.isHidden = true
         bodyfor.quotecart.scrollview.isHidden = false
         bodyfor.submitquote.scrollview.isHidden = true
@@ -201,7 +203,7 @@ class qp: UIView {
         allBrands.disAppear()
         product.create(updateQuote: true, view: bodyfor.product.scrollview)
         Distributor.disAppear()
-        promotion.disAppear()
+        search.disAppear()
         bodyfor.compare.scrollview.isHidden = true
         bodyfor.quotecart.scrollview.isHidden = true
         bodyfor.submitquote.scrollview.isHidden = true
@@ -244,7 +246,7 @@ class qp: UIView {
         allBrands.disAppear()
         product.create(updateQuote: false, view: bodyfor.product.scrollview)
         Distributor.disAppear()
-        promotion.disAppear()
+        search.disAppear()
         bodyfor.compare.scrollview.isHidden = true
         bodyfor.quotecart.scrollview.isHidden = true
         bodyfor.submitquote.scrollview.isHidden = true

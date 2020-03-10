@@ -7,11 +7,14 @@ import Foundation
 
 // MARK: - CategoriesDataModel
 struct CategoriesDataModel: Codable {
-    var id, parentID: Int?
-    var name: String?
-    var isActive: Bool?
-    var position, level, productCount: Int?
-    var childrenData: [CategoriesDataModel]?
+    var id = Int()
+    var parentID = Int()
+    var name = String()
+    var isActive = Bool()
+    var position = Int()
+    var level = Int()
+    var productCount = Int()
+    var childrenData: [CategoriesDataModel] = []
 
     enum CodingKeys: String, CodingKey {
         case id

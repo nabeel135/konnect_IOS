@@ -6,12 +6,15 @@ target 'Conektr' do
   use_frameworks!
 
   # Pods for Conektr
-  pod 'Alamofire'
-  pod 'AFNetworking'
-  pod 'MBProgressHUD'
-  pod 'IQKeyboardManagerSwift'
-  pod 'MTBBarcodeScanner'
-pod 'SDWebImage'
+
+pod 'AFNetworking'
+pod 'IQKeyboardManagerSwift'
+pod 'MBProgressHUD'
+pod 'MTBBarcodeScanner'
+pod 'SDWebImage', '~> 5.0'
 pod 'SwiftGoogleTranslate'
+pod 'DropDown'
+pod 'Alamofire', '~> 4.7'
+pod 'SwiftyJSON', '~> 4.2.0'
 
 end

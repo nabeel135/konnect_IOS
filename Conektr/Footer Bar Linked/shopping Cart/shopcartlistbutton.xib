@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="shopCartButtons" customModule="Conektr" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="484" height="88"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CB4-nb-aX8" customClass="sbButton" customModule="Conektr" customModuleProvider="target">
+                    <rect key="frame" x="10" y="5" width="224" height="35"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="35" id="mo7-Cg-Oxd"/>
+                    </constraints>
+                    <state key="normal" title="Update Shopping Cart">
+                        <color key="titleColor" red="0.4431372549" green="0.27450980390000002" blue="0.63529411759999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </state>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath=".Layer">
+                            <integer key="value" value="0"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                            <real key="value" value="5"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="border">
+                            <real key="value" value="1"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                            <color key="value" red="0.4431372549" green="0.27450980390000002" blue="0.63529411759999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x4B-x3-eNL" customClass="sbButton" customModule="Conektr" customModuleProvider="target">
+                    <rect key="frame" x="80" y="45" width="324" height="35"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="35" id="cxR-C6-1wV"/>
+                    </constraints>
+                    <state key="normal" title="Remove Item">
+                        <color key="titleColor" red="0.4431372549" green="0.27450980390000002" blue="0.63529411759999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </state>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                            <real key="value" value="5"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="border">
+                            <real key="value" value="1"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                            <color key="value" red="0.4431372549" green="0.27450980390000002" blue="0.63529411759999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9yW-6b-rA1" customClass="sbButton" customModule="Conektr" customModuleProvider="target">
+                    <rect key="frame" x="239" y="5" width="235" height="35"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="35" id="7vk-ke-Ja8"/>
+                    </constraints>
+                    <state key="normal" title="Move to Shop List">
+                        <color key="titleColor" red="0.4431372549" green="0.27450980390000002" blue="0.63529411759999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </state>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                            <real key="value" value="5"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                            <color key="value" red="0.4431372549" green="0.27450980390000002" blue="0.63529411759999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="border">
+                            <real key="value" value="1"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </button>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="x4B-x3-eNL" firstAttribute="height" secondItem="CB4-nb-aX8" secondAttribute="height" id="AvB-Pt-8xa"/>
+                <constraint firstAttribute="trailing" secondItem="9yW-6b-rA1" secondAttribute="trailing" constant="10" id="DVg-hW-EGn"/>
+                <constraint firstItem="CB4-nb-aX8" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="5" id="HSO-Js-WoE"/>
+                <constraint firstItem="x4B-x3-eNL" firstAttribute="width" secondItem="CB4-nb-aX8" secondAttribute="width" multiplier="1.44578" id="Qf7-fa-nwy"/>
+                <constraint firstItem="9yW-6b-rA1" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="5" id="Vt0-wZ-Sr5"/>
+                <constraint firstItem="x4B-x3-eNL" firstAttribute="top" secondItem="9yW-6b-rA1" secondAttribute="bottom" constant="5" id="WGb-Ha-Wdk"/>
+                <constraint firstItem="x4B-x3-eNL" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" id="cGO-zQ-Bk4"/>
+                <constraint firstItem="CB4-nb-aX8" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="10" id="gBv-6D-nUm"/>
+                <constraint firstItem="9yW-6b-rA1" firstAttribute="width" secondItem="CB4-nb-aX8" secondAttribute="width" multiplier="1.04854" id="i9B-H8-YW2"/>
+                <constraint firstItem="9yW-6b-rA1" firstAttribute="leading" secondItem="CB4-nb-aX8" secondAttribute="trailing" constant="5" id="sdO-TD-tTE"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <connections>
+                <outlet property="movetoSHoplIST" destination="9yW-6b-rA1" id="lL9-RQ-tSA"/>
+                <outlet property="removeitem" destination="x4B-x3-eNL" id="fxp-Xd-w6X"/>
+                <outlet property="updateCart" destination="CB4-nb-aX8" id="sNX-Qu-eZn"/>
+            </connections>
+            <point key="canvasLocation" x="134.78260869565219" y="-158.03571428571428"/>
+        </view>
+    </objects>
+</document>

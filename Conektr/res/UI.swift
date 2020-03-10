@@ -8,6 +8,9 @@ let y = UIScreen.main.bounds.size.height
 class UI: UIView {
     let table = UITableView()
     let tableDelegate = TVC()
+    let collectionDelegate = CVC()
+    var collection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+    
     let label = UILabel.init()
     let imag = UIImageView()
     let clickableimg = UIButton.init()
@@ -39,9 +42,16 @@ class UI: UIView {
     
     
     /*---------------------------*/
-    func TableView(x:CGFloat,y:CGFloat,width:CGFloat,height:CGFloat,bkcolor:UIColor,border:CGFloat,borderColor:UIColor,separatorColor:UIColor,Rows:Int,editing:Bool,cellheight:CGFloat,CellHeight:@escaping () -> Void,Cellview:@escaping () -> Void,onDelete:@escaping () -> Void,view:UIView) {
+    func TableView(x:CGFloat,y:CGFloat,width:CGFloat,height:CGFloat,bkcolor:UIColor,border:CGFloat,borderColor:UIColor,separatorColor:UIColor,Sections:Int,SectionHeight:CGFloat,SectionHEIGHT:@escaping () -> Void,sectionView:@escaping () -> Void,rows:Int,Rows:@escaping () -> Void,editing:Bool,cellheight:CGFloat,CellHeight:@escaping () -> Void,Cellview:@escaping () -> Void,onDelete:@escaping () -> Void,view:UIView) {
         
-        tableDelegate.use(editing: editing, numberOFrows: Rows, cellheight: cellheight, CellHeight: {
+        tableDelegate.use(editing: editing, numberOFsections: Sections, sectionHeight: SectionHeight, SectionHeight: {
+            SectionHEIGHT()
+        }, sectionView: {
+            sectionView()
+        }, numberOFrows: rows, Numberofrows: {
+            Rows()
+        }
+, cellheight: cellheight, CellHeight: {
             CellHeight()
         }, Cellview: {
             Cellview()
@@ -65,6 +75,30 @@ class UI: UIView {
     }
     
     /*---------------------------*/
+    func CollectionView(x:CGFloat,y:CGFloat,width:CGFloat,height:CGFloat,bkcolor:UIColor,scrolldirection:UICollectionView.ScrollDirection,InterSpaceHorizontal:CGFloat,InterSpaceVertical:CGFloat,numberOFcells:Int,cellsize:@escaping ()->Void,cellmargin:@escaping ()->Void,cellview:@escaping ()->Void,view:UIView) {
+        collection = UICollectionView(frame: CGRect(x: x, y: y, width: width, height: height), collectionViewLayout: collectionDelegate.layout)
+        collection.backgroundColor = bkcolor
+        
+        collectionDelegate.layout.scrollDirection = scrolldirection
+        collectionDelegate.layout.minimumInteritemSpacing = InterSpaceHorizontal
+        collectionDelegate.layout.minimumLineSpacing = InterSpaceVertical
+        
+        collectionDelegate.use(numberofcells: numberOFcells, cellsize: {
+            cellsize()
+        }, cellmargin: {
+            cellmargin()
+        }, cellview: {
+            cellview()
+        })
+        
+        if collection.superview == nil {
+            collection.delegate = collectionDelegate
+            collection.dataSource = collectionDelegate
+            collection.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+            view.addSubview(collection)
+        }
+    }
+    /*----------------------------------*/
     func CheckBox(x:CGFloat,y:CGFloat,width:CGFloat,height:CGFloat,trueImage:UIImage,falseImage:UIImage,isTrue:Bool,view:UIView,onClick:@escaping () -> Void) {
         
         checkBoxtrueimage = trueImage
@@ -301,7 +335,7 @@ class UI: UIView {
             self.comboBox.subviews[0].isHidden = true
             self.comboBox.frame.size.height = (self.comboBox.frame.size.height - self.comboBox.subviews[0].frame.size.height) * 2
         }
-        comboBoxrunAfter()
+//        comboBoxrunAfter()
     }
     @objc func comboBoxChoose(_ tap:UITapGestureRecognizer){
         coreAnimation.Scale(start: 1, end: 0.8, duration: 0.1, repeatCount: 1, autoReverse: true, view: tap.view!)
@@ -473,6 +507,7 @@ class UI: UIView {
            label.frame = CGRect(x: x, y: y, width: width, height: height)
            label.backgroundColor = bkcolor
            label.text = txt
+        TranslateText(label: label)
            label.numberOfLines = 0
         label.layer.masksToBounds = true
         label.layer.cornerRadius = cornerRadius;
@@ -528,6 +563,7 @@ class UI: UIView {
     func Button(x:CGFloat, y:CGFloat, width:CGFloat, height:CGFloat, title:String,fontsize:CGFloat, any: Any, function:Selector,cornerRadius:CGFloat, bordercolor:UIColor, bkcolor:UIColor, txtcolor:UIColor, view:UIView) {
         button.frame = CGRect(x: x, y: y, width: width, height: height)
         button.setTitle(title, for: .normal)
+        TranslateText(button: button)
         button.titleLabel?.font = UIFont.systemFont(ofSize: fontsize, weight: .regular)
         button.layer.borderWidth = 1
         button.layer.borderColor = bordercolor.cgColor
@@ -553,8 +589,7 @@ class UI: UIView {
     }
     
     func Image(x:CGFloat,y:CGFloat,width:CGFloat,height:CGFloat,mode:UIView.ContentMode, src: UIImage, view:UIView,imageUrl:String?){
-//        imag.image = src
-        if let str = imageUrl
+        if let str = imageUrl=="" ? "https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.seilevel.com%2Frequirements%2Fwp-content%2Fplugins%2Fstormhill_author_page%2Fimg%2Fimage-not-found.png":imageUrl
         {
             imag.load(url: URL(string: str)!)
         }
@@ -681,11 +716,8 @@ extension UIImageView {
         DispatchQueue.global().async { [weak self] in
             if let data = try? Data(contentsOf: url) {
                 if let image = UIImage(data: data) {
-                    DispatchQueue.main.async {
-                        self?.image = image
-                    }
-                }
-            }
+                    DispatchQueue.main.async {self?.image = image}
+                }}
         }
     }
 }
@@ -809,26 +841,6 @@ extension UIView {
 
 
 
-
-
-
-
-/*---------------------------- Extension String ---------------------------*/
-
-
-extension String {
-    var stringWidth: CGFloat {
-        let constraintRect = CGSize(width: UIScreen.main.bounds.width, height: .greatestFiniteMagnitude)
-        let boundingBox = self.trimmingCharacters(in: .whitespacesAndNewlines).boundingRect(with: constraintRect, options: [.usesLineFragmentOrigin, .usesFontLeading], attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14)], context: nil)
-        return boundingBox.width
-    }
-    
-    var stringHeight: CGFloat {
-        let constraintRect = CGSize(width: UIScreen.main.bounds.width, height: .greatestFiniteMagnitude)
-        let boundingBox = self.trimmingCharacters(in: .whitespacesAndNewlines).boundingRect(with: constraintRect, options: [.usesLineFragmentOrigin, .usesFontLeading], attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14)], context: nil)
-        return boundingBox.height
-    }
-}
 
 
 
@@ -999,36 +1011,57 @@ extension UITextField {
 
 // MARK:- TableView Delegate
 class TVC:UIView,UITableViewDelegate,UITableViewDataSource {
+    
+    var Model = UIView()
     var numberOFrows = Int()
+    var Rows:() -> () = {}
+    
     var cellheight = CGFloat()
     var CellHeight:() -> () = {}
     var cellview:() -> () = {}
-    var ondelete:() -> () = {}
     var cell = UITableViewCell()
-    var index = Int()
-    var editing = false
     
-    func Cellheight(at:Int,height:CGFloat,oldheight:CGFloat) {
-        if index == at {cellheight = height}
-        else{cellheight = oldheight}
-    }
-    func use(editing:Bool,numberOFrows:Int,cellheight:CGFloat,CellHeight:@escaping () -> Void,Cellview:@escaping () -> Void,onDel:@escaping () -> Void) {
+    var sectionview = UIView()
+    
+    var numberOFsections = Int()
+    var sectionheight = CGFloat()
+    var SectionHeight:() -> () = {}
+    var sectionView:() -> () = {}
+    
+    var index = Int()
+    var section = Int()
+    var editing = false
+    var ondelete:() -> () = {}
+
+    func use(editing:Bool,numberOFsections:Int,sectionHeight:CGFloat,SectionHeight:@escaping () -> Void,sectionView:@escaping () -> Void,numberOFrows:Int,Numberofrows:@escaping () -> Void,cellheight:CGFloat,CellHeight:@escaping () -> Void,Cellview:@escaping () -> Void,onDel:@escaping () -> Void) {
         self.editing = editing
+        self.ondelete = {onDel()}
+
         self.numberOFrows = numberOFrows
+        self.Rows = {Numberofrows()}
+            
         self.cellheight = cellheight
         self.CellHeight = {CellHeight()}
         self.cellview = {Cellview()}
-        self.ondelete = {onDel()}
+        
+        self.numberOFsections = numberOFsections
+        self.sectionheight = sectionHeight
+        self.SectionHeight = {SectionHeight()}
+        
+        self.sectionView = {sectionView()}
     }
     
     // UITableViewDelegate
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        self.section = section
+        self.Rows()
         return numberOFrows
     }
     
-    // UITableViewDataSource
+    // CELL VIEW
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         self.cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        self.section = indexPath.section
         self.index = indexPath.row
         self.cellview()
         return cell
@@ -1049,15 +1082,92 @@ class TVC:UIView,UITableViewDelegate,UITableViewDataSource {
     }
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         index = indexPath.row
+        section = indexPath.section
         if editingStyle == .delete {
             self.ondelete()
         }
     }
     
+    
+    // number of section
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return numberOFsections
+    }
+    // section header height
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        self.section = section
+        self.SectionHeight()
+        return sectionheight
+    }
+    // section view header
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: sectionheight))
+        self.section = section
+        sectionview = view
+        sectionView()
+        return sectionview
+    }
+    
 }
 
 
-
+// MARK:- CollectionView Delegate
+class CVC:UIView,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate,UICollectionViewDataSource{
+    
+    let layout = UICollectionViewFlowLayout()
+    var NumberOFcells = Int()
+    var cellView:() -> () = {}
+    var cell = UICollectionViewCell()
+    var cellSize = CGSize()
+    var CellSize:()->() = {}
+    var cellMargin = UIEdgeInsets()
+    var CellMargin:()->() = {}
+    
+    var index = Int()
+    var section = Int()
+    
+    func use(numberofcells:Int,cellsize:@escaping () -> Void,cellmargin:@escaping ()-> Void,cellview:@escaping () -> Void) {
+        
+        
+        NumberOFcells = numberofcells
+        CellSize = {cellsize()}
+        cellView = {cellview()}
+        CellMargin = {cellmargin()}
+        
+    }
+    
+    // cells Count
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return NumberOFcells
+    }
+    
+    
+    // Cell View
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        self.cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
+        section = indexPath.section
+        index = indexPath.row
+        cellView()
+        return self.cell
+    }
+    
+    // Cell size
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        section = indexPath.section
+        index = indexPath.row
+        CellSize()
+        return cellSize
+    }
+    
+    // cell margin
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        self.section = section
+        CellMargin()
+        return cellMargin
+    }
+     
+    
+}
 
 
 

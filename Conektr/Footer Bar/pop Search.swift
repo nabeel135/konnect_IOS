@@ -35,11 +35,11 @@ class sp: UIView {
         Searchpop.search.Textfield(x: 10, y: 45, width: x-20, height: 45, placeholder: "Enter keywords to search...", border: 1, borderRadius: 20, txtAlign: .center, bordercolor: #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1), keyboard: .default, textColor: #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), bkcolor: #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), view: Searchpop.obj.view)
         Searchpop.search.clickableimage(x: x-45, y: 50, width: 20, height: 30, image: UIImage(named: "search")!, cornerRadius: 0, borderWidth: 0, borderColor: .clear, function: #selector(voicesearchbtn), any: self, view: Searchpop.obj.view)
         
-        Searchpop.barcode.LButton(x: 10, y: 120, width: x-20, height: 45, title: "Search Product With Bbarcode Scanner", fontSize: 16, any: self, tapfunction: #selector(barcodebtn(_:)), cornerRadius: 20, bordercolor: #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), bkcolor: .white, txtcolor: #colorLiteral(red: 0.4388002753, green: 0.2797730267, blue: 0.6211301684, alpha: 1), view: Searchpop.obj.view)
+        Searchpop.barcode.LButton(x: 10, y: 120, width: x-20, height: 45, title: "Search Product With Bbarcode Scanner", fontSize: 12, any: self, tapfunction: #selector(barcodebtn(_:)), cornerRadius: 20, bordercolor: #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), bkcolor: .white, txtcolor: #colorLiteral(red: 0.4388002753, green: 0.2797730267, blue: 0.6211301684, alpha: 1), view: Searchpop.obj.view)
         Searchpop.barcode.Image(x: x-45, y: 130, width: 25, height: 20, mode: .scaleToFill, src: UIImage(named: "barcode")!, view: Searchpop.obj.view)
         
         
-        Searchpop.obj.Button(x: 40, y: 200, width: x-80, height: 40, title: "SEARCH", fontsize: 14, any: any, function: searchBtn, cornerRadius: 20, bordercolor: .clear, bkcolor: #colorLiteral(red: 0.4388002753, green: 0.2797730267, blue: 0.6211301684, alpha: 1), txtcolor: #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), view: Searchpop.obj.view)
+        Searchpop.obj.Button(x: 40, y: 200, width: x-80, height: 40, title: "SEARCH", fontsize: 12, any: any, function: searchBtn, cornerRadius: 20, bordercolor: .clear, bkcolor: #colorLiteral(red: 0.4388002753, green: 0.2797730267, blue: 0.6211301684, alpha: 1), txtcolor: #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), view: Searchpop.obj.view)
         /*----------------------*/
 
         Searchpop.obj.view.frame.size.height = Searchpop.obj.button.frame.maxY+45
@@ -103,25 +103,22 @@ class sp: UIView {
                                 Searchpop.barcode.imag.isHidden = true
                                 Searchpop.search.clickableimg.isHidden = true
                                 try self.scanner?.startScanning(with: .back,
-                                                                resultBlock: { codes in
-                                                                    if let codes = codes {
-                                                                        for code in codes {
-                                                                            let stringValue = code.stringValue!
-                                                                            print("Found code: \(stringValue)")
-                                                                            Searchpop.search.txtfield.text = stringValue
-//                                                                            Searchpop.search.txtfield.isHidden = true
-//                                                                            Searchpop.obj.button.isHidden = true
-//                                                                            Searchpop.barcode.Lbutton.isHidden = true
-//                                                                            Searchpop.barcode.imag.isHidden = true
-//                                                                            Searchpop.search.clickableimg.isHidden = true
-                                                                            self.scanner?.stopScanning()
-                                                                            
-                                                                            let searchresultAPi = SearchProductAPIVC()
-                                                                            let str = "%" + Searchpop.search.txtfield.text! + "%"
-                                                                            searchresultAPi.GetSearchResult(str: str)
-                                                                            
-                                                                        }
-                                                                    }
+                                                                resultBlock:
+                                    { codes in
+                                        if let codes = codes {
+                                            for code in codes {
+                                                let stringValue = code.stringValue!
+                                                print("Found code: \(stringValue)")
+                                                Searchpop.search.txtfield.text = stringValue
+                                                
+                                                self.scanner?.stopScanning()
+                                                
+                                                let searchresultAPi = SearchProductAPIVC()
+                                                let str = "%" + Searchpop.search.txtfield.text! + "%"
+                                                searchresultAPi.GetSearchResult(str: str)
+                                                
+                                            }
+                                        }
                                 })
                             } catch {
                                 NSLog("Unable to start scanning")

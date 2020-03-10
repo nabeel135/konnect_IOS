@@ -43,7 +43,7 @@ class fm: UIView {
         FooterMenu.myAccount.Label(x: 0, y: FooterMenu.myAccount.imag.frame.maxY, width: bw, height: 30, txt: "MyAccount", fontsize: 12, bold: false, cornerRadius: 0, border: 0, borderColor: .clear, alignment: .center, bkcolor: .clear, txtcolor: #colorLiteral(red: 0.6084945798, green: 0.3483039141, blue: 0.7122580409, alpha: 1), view: FooterMenu.myAccount.view)
         //MENU
         FooterMenu.menu.View(x: myAccount.view.frame.maxX, y: 0, width: bw, height: bh, bkcolor: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), cornerRadius: 0, border: 0, borderColor: .clear, view: withinView)
-        FooterMenu.menu.Image(x: FooterMenu.menu.view.frame.size.width/2 - 15, y: 10, width: 20, height: 15, mode: .scaleToFill, src: UIImage(named: "menufalse")!, view: FooterMenu.menu.view, imageUrl: nil)
+        FooterMenu.menu.Image(x: FooterMenu.menu.view.frame.size.width/2 - 15, y: 10, width: 25, height: 15, mode: .scaleToFill, src: UIImage(named: "menufalse")!, view: FooterMenu.menu.view, imageUrl: nil)
         FooterMenu.menu.Label(x: 0, y: FooterMenu.menu.imag.frame.maxY, width: bw, height: 30, txt: "Menu", fontsize: 12, bold: false, cornerRadius: 0, border: 0, borderColor: .clear, alignment: .center, bkcolor: .clear, txtcolor: #colorLiteral(red: 0.6084945798, green: 0.3483039141, blue: 0.7122580409, alpha: 1), view: FooterMenu.menu.view)
 
 

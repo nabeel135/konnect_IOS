@@ -15,42 +15,50 @@ PODS:
   - AFNetworking/UIKit (3.2.1):
     - AFNetworking/NSURLSession
   - Alamofire (4.9.1)
+  - DropDown (2.3.13)
   - IQKeyboardManagerSwift (6.5.4)
   - MBProgressHUD (1.1.0)
   - MTBBarcodeScanner (5.0.11)
-  - SDWebImage (5.4.0):
-    - SDWebImage/Core (= 5.4.0)
-  - SDWebImage/Core (5.4.0)
+  - SDWebImage (5.4.2):
+    - SDWebImage/Core (= 5.4.2)
+  - SDWebImage/Core (5.4.2)
   - SwiftGoogleTranslate (0.2.1)
+  - SwiftyJSON (4.2.0)
 
 DEPENDENCIES:
   - AFNetworking
-  - Alamofire
+  - Alamofire (~> 4.7)
+  - DropDown
   - IQKeyboardManagerSwift
   - MBProgressHUD
   - MTBBarcodeScanner
-  - SDWebImage
+  - SDWebImage (~> 5.0)
   - SwiftGoogleTranslate
+  - SwiftyJSON (~> 4.2.0)
 
 SPEC REPOS:
   trunk:
     - AFNetworking
     - Alamofire
+    - DropDown
     - IQKeyboardManagerSwift
     - MBProgressHUD
     - MTBBarcodeScanner
     - SDWebImage
     - SwiftGoogleTranslate
+    - SwiftyJSON
 
 SPEC CHECKSUMS:
   AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
   Alamofire: 85e8a02c69d6020a0d734f6054870d7ecb75cf18
+  DropDown: 8a2116376c1981888557f72ec2ffc9a5e0e456ec
   IQKeyboardManagerSwift: 2dde0fc70110e8eac7ccce2a46fdbec6a850b414
   MBProgressHUD: e7baa36a220447d8aeb12769bf0585582f3866d9
   MTBBarcodeScanner: f453b33c4b7dfe545d8c6484ed744d55671788cb
-  SDWebImage: 5bf6aec6481ae2a062bdc59f9d6c1d1e552090e0
+  SDWebImage: 4ca2dc4eefae4224bea8f504251cda485a363745
   SwiftGoogleTranslate: 96960d3548e800e15b347518afca546d2edc8519
+  SwiftyJSON: c4bcba26dd9ec7a027fc8eade48e2c911f229e96
 
-PODFILE CHECKSUM: f39c748c84635a7c26f1a4538fec52e9d4572d2d
+PODFILE CHECKSUM: 3386e73d64dea9ae69bf881204b21cfc0ae4bb43
 
 COCOAPODS: 1.8.4

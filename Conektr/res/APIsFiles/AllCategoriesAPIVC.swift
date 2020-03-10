@@ -9,65 +9,61 @@
 import UIKit
 
 class AllCategoriesAPIVC {
-
     
-        var AllCatArray:CategoriesDataModel?
-        func GetAllCategories() {
-            
-            let manager = NetworkingHelper.sharedNetworkManager
-            manager.GetAllBCategories(withParameters: nil, successBlock: GetSucceeded, failureBlock: GetFailed)
-        }
+    
+    func GetAllCategories() {
         
+        let manager = NetworkingHelper.sharedNetworkManager
+        manager.GetAllBCategories(withParameters: nil, successBlock: GetSucceeded, failureBlock: GetFailed)
+    }
+    
     
     
     
     
     func GetSucceeded(task:URLSessionDataTask, responseObject:Any?)
+    {
+        if responseObject == nil
         {
-            if responseObject == nil
-            {
-                return
-            }
+            return
+        }
+        
+        do{
+            let decoder = JSONDecoder()
+            let Array = try decoder.decode(CategoriesDataModel.self, from: responseObject as! Data)
+            AllCatArray = Array
             
-            do{
-                let decoder = JSONDecoder()
-                let Array = try decoder.decode(CategoriesDataModel.self, from: responseObject as! Data)
-                AllCatArray = Array
-                
-                
-                
-                
-                for obj in AllCatArray!.childrenData! {
-//                    print("\(obj.id) \(obj.name)  \(obj.isActive)")
-                    nested2(obj)
-                }
-            }
-                catch
-                {
-                    
-                }
-            }
-            fileprivate func nested2(_ obj: CategoriesDataModel) {
-                if obj.childrenData!.count > 0 {
-//                    print(obj.childrenData!.count)
-                    for obj2 in obj.childrenData! {
-//                        print("----  \(obj2.id)  \(obj2.name)   \(obj2.isActive)")
-                        nested3(obj2)
-                    }
-                }
-            }
+            
+            AllCatArray.childrenData.map {
+                if($0.isActive == true){
+                    let parent = mc()
+                    parent.id = $0.id
+                    parent.parentID = $0.parentID
+                    parent.name = $0.name
+                    menuCateobj.append(parent)
+                    $0.childrenData.map{
+                        if($0.isActive == true){
+                            let sub = mc()
+                            sub.id = $0.id
+                            sub.parentID = $0.parentID
+                            sub.name = $0.name
+                            menuCateobj[menuCateobj.count-1].sub.append(sub)
+                            $0.childrenData.map{
+                                if($0.isActive == true){
+                                    let child = mc()
+                                    child.id = $0.id
+                                    child.parentID = $0.parentID
+                                    child.name = $0.name
+                                    menuCateobj[menuCateobj.count-1].sub[menuCateobj[menuCateobj.count-1].sub.count-1].sub.append(child)
+                                }}}}}}
+            
+        }catch{}
+    }
     
-            fileprivate func nested3(_ obj2: CategoriesDataModel) {
-                if obj2.childrenData!.count > 0 {
-                    for obj3 in obj2.childrenData! {
-//                        print("     *** \(obj3.id) \(obj3.name)   \(obj3.isActive)")
-                    }
-                }
-            }
-            func GetFailed(task:URLSessionDataTask?, error:Error)
-            {
-                AlertHelper.showErrorAlert(WithTitle: "Error", Message: error.localizedDescription, Sender: NetworkingHelper.sharedNetworkManager.appDelegate().presentedViewController!)
-            }
-
-
+    func GetFailed(task:URLSessionDataTask?, error:Error)
+    {
+        AlertHelper.showErrorAlert(WithTitle: "Error", Message: error.localizedDescription, Sender: NetworkingHelper.sharedNetworkManager.appDelegate().presentedViewController!)
+    }
+    
+    
 }

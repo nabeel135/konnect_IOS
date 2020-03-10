@@ -23,7 +23,11 @@ class ProductOptionAPIVC: UIViewController {
     
     func GetProductOptions(sku:String) {
         let manager = NetworkingHelper.sharedNetworkManager
-        manager.ProductDetailOptions(withurlString: "/product_detail.php?sku=\(sku)", successBlock: GetSucceeded, failureBlock: GetFailed)
+        manager.ProductDetailOptions(
+            withurlString: "/product_detail.php?sku=\(sku)",
+            successBlock: GetSucceeded,
+            failureBlock: GetFailed)
+        
     }
     
     func GetSucceeded(task:URLSessionDataTask, responseObject:Any?)
@@ -35,9 +39,35 @@ class ProductOptionAPIVC: UIViewController {
         
         do{
             let decoder = JSONDecoder()
-            let array = try decoder.decode(ProductOptions.self, from: responseObject as! Data)
+            let array = try decoder.decode(ProductOption.self, from: responseObject as! Data)
+            
+            voptions = (array.data?.filter{$0.label == "Variant"}.first)!
+            productdetail.variantlist.removeAll()
+            for obj in voptions.values
+            {
+                let list:vlist = vlist()
+                
+                list.id = obj.valueIndex
+                list.name = obj.name
+                productdetail.variantlist.append(list)
+            }
+            
+            product.variantlistview()
             
             
+            pcoptions = (array.data?.filter{$0.label == "Product Config"}.first)!
+            
+//            for obj in pcoptions?.values ?? []
+//            {
+//                var list:clist = clist()
+//
+//                list.id = obj.valueIndex!
+//                list.title = obj.name!
+//
+//                productdetail.configlist.append(list)
+//            }
+//
+//            product.configlistCellview()
             //                    for obj in array
             //                    {
             //                        var pro = ProductOption()
@@ -75,7 +105,9 @@ class ProductOptionAPIVC: UIViewController {
             let str = String(decoding: responseObject as! Data, as: UTF8.self)
             let decoder = JSONDecoder()
             let array = try decoder.decode(ProductConfigDetails.self, from: responseObject as! Data)
-            print(array)
+            
+            productconfigdetail = array
+//            print(array)
             
             //                    for obj in array
             //                    {
@@ -87,10 +119,7 @@ class ProductOptionAPIVC: UIViewController {
             
             
         }
-        catch
-        {
-            
-        }
+        catch{}
     }
     
     func GetProdConFailed(task:URLSessionDataTask?, error:Error)

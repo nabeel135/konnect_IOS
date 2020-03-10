@@ -14,131 +14,6 @@ class p: UIView {
     
     
     
-    /*--------------------------------------------------------------*/
-
-    ///////////////////////////////////////////
-    //////////////////////////////////////////
-    //////////////////// BUTTON
-    //////////////////////////////////////////
-    @objc func quoteButton(_ btn:UIButton){
-        print("quote button")
-    }
-    ///////////////////////////////////////////
-    //////////////////////////////////////////
-    //////////////////// BUTTON
-    //////////////////////////////////////////
-    @objc func productimageClicked(){
-        print("image clicked")
-    }
-    ///////////////////////////////////////////
-    //////////////////////////////////////////
-    //////////////////// BUTTON
-    //////////////////////////////////////////
-    @objc func favouriteButton(){
-        print("Favourite")
-    }
-    ///////////////////////////////////////////
-    //////////////////////////////////////////
-    //////////////////// BUTTON
-    //////////////////////////////////////////
-    @objc func addtoCartButton(){
-        
-        
-        
-       print("add to Cart")
-        
-        let vc = AddtoCartAPIVC()
-                    var item = CartDatum()
-                    item.sku = productdetail.sku
-                    item.quoteID =  UserDefaults.standard.string(forKey: "quote_id")
-                    item.qty = Int(product.quantity.txtfield.text ?? "1")
-                    vc.item = item
-                vc.AddItemToCart()
-        
-        
-//        let item  = productobj.filter{$0.id == tag}
-//        var nsArray = [[String:Any]]()
-//            var dictionary = [String:Any]()
-//            dictionary["sku"] = item?.sku
-//            dictionary["quote_id"] = item?.id
-//            dictionary["qty"] = product.quantity.txtfield.text
-//        nsArray.append(dictionary)
-//        let parameters:[String:Any] = ["cartItem":nsArray]
-//        print(parameters)
-    }
-    ///////////////////////////////////////////
-    //////////////////////////////////////////
-    //////////////////// BUTTON
-    //////////////////////////////////////////
-    @objc func addtoQuoteButton(){
-                print("add to quote")
-        
-        let addtoquote = AddtoQuoteAPIVC()
-        var item = CartDatum()
-        item.sku = productdetail.sku
-        item.quoteID =  ""
-        item.qty = Int(product.quantity.txtfield.text ?? "1")
-        addtoquote.item = item
-        let quote_id = UserDefaults.standard.value(forKey: "quoteToken") as? String
-        if(quote_id == nil || quote_id == "")
-        {
-            addtoquote.CreateQuote1()
-        }
-        else
-        {
-            addtoquote.requestser = addtoquote.manager.requestSerializer
-            addtoquote.quoteId = quote_id!
-            addtoquote.GetItemIdForQuote()
-        }
-        
-        
-    }
-    ///////////////////////////////////////////
-    //////////////////////////////////////////
-    //////////////////// BUTTON
-    //////////////////////////////////////////
-    @objc func submitReviewButton(){
-        print("submit Review")
-    }
-    
-    
-    ///////////////////////////////////////////
-    //////////////////////////////////////////
-    //////////////////// UPDATE QUOTE BUTTON
-    //////////////////////////////////////////
-    @objc func updateQuoteButton(){
-        print("update quote")
-    }
-    
-    /*--------------------------------------------------------------*/
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     var parentbody = UIScrollView()
     let body = UI()
@@ -205,7 +80,7 @@ class p: UIView {
         //PRODUCT IMAGE
         product.productimg.View(x: 10, y: 10, width: x-20, height: x-100, bkcolor: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), cornerRadius: 0, border: 1, borderColor: #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 0.4416470462), view: product.body.view)
         product.productimg.Image(x: 10, y: 10, width: x-20, height: x-100, mode: .scaleAspectFit, src: productdetail.imag, view: product.body.view)
-
+        
         product.productimg.view.addGestureRecognizer(UITapGestureRecognizer(target: product, action: #selector(productimageClicked)))
         
         //DISTRIBUTOR
@@ -260,17 +135,20 @@ class p: UIView {
             
             product.configlistCellview()
             
+            
+            
         }
         
         
         //QUANTITY
         var qy = CGFloat()
         if product.discount.label.isHidden {
-            qy = product.clistscroll.scrollview.frame.maxY+10
-        }
-        else{
-            qy = product.price.label.frame.maxY+10
-        }
+            qy = product.clistscroll.scrollview.frame.maxY+10}
+        else{qy = product.price.label.frame.maxY+10}
+        product.quantity.autoSizelabel.frame.origin.y = qy
+        product.quantity.txtfield.frame.origin.y = qy
+        product.favouriteicon.checkBox.frame.origin.y = qy
+        
         product.quantity.AutoSizeLabel(x: 10, y: qy, height: 30, txt: "Total Qty", fontsize: 16, bkcolor: .clear, txtcolor: #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), border: 0, borderColor: .clear, cornerRadius: 0, alignment: .left, view: product.body.view)
         product.quantity.Textfield(x: product.quantity.autoSizelabel.frame.maxX+5, y: qy, width: 40, height: 30, placeholder: "", border: 1, borderRadius: 0, txtAlign: .center, bordercolor: #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), keyboard: .numberPad, textColor: #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), bkcolor: .clear, view: product.body.view)
         product.quantity.txtfield.text = "\(productdetail.quantity)"
@@ -281,6 +159,7 @@ class p: UIView {
         }
         
         //BUTTONS
+        
         if updateQuote {
             product.updateQuotebtn.button.isHidden = false
             product.addtoCartbtn.button.isHidden = true
@@ -305,6 +184,7 @@ class p: UIView {
         }
         
         //////////////////////////////////////////////// DETAIL
+        
         product.detail.View(x: 10, y: dy, width: x-20, height: 50, bkcolor: #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), cornerRadius: 5, border: 1, borderColor: #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1), view: product.body.view)
         product.detail.Label(x: 20, y: 0, width: 150, height: 50, txt: "DETIALS", fontsize: 16, bold: false, cornerRadius: 0, border: 0, borderColor: .clear, alignment: .left, bkcolor: .clear, txtcolor: #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), view: product.detail.view)
         product.detail.Image(x: product.detail.view.frame.size.width-40, y: 15, width: 20, height: 20, mode: .scaleAspectFit, src: UIImage(named: "+")!, view: product.detail.view)
@@ -314,6 +194,7 @@ class p: UIView {
         product.detailbody.label.isHidden = true
         /*------------------------------------------*/
         /////////////////////////////////////////// MORE INFO
+        
         var morey = product.detailbody.label.frame.maxY+10
         if product.detailbody.label.isHidden {
             morey = product.detail.view.frame.maxY+10
@@ -402,9 +283,10 @@ class p: UIView {
         for obj in productdetail.variantlist {
             product.variantlist.append(UI())
             if product.variantlist.count == 1 {
-                var a = obj
+                let a = obj
                 a.isSelected = true
                 product.variantlist[product.variantlist.count-1].Button(x: vx, y: 10, width: 100, height: 40, title: obj.name, fontsize: 14, any: self, function: #selector(product.selectVariant(_:)), cornerRadius: 5, bordercolor: #colorLiteral(red: 0.4235294118, green: 0.2235294118, blue: 0.5921568627, alpha: 1), bkcolor: #colorLiteral(red: 0.4235294118, green: 0.2235294118, blue: 0.5921568627, alpha: 1), txtcolor: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), view: product.variantscroll.scrollview)
+//                showProductConfig(id: obj.id)
             }
             else{
                 product.variantlist[product.variantlist.count-1].Button(x: vx, y: 10, width: 100, height: 40, title: obj.name, fontsize: 14, any: self, function: #selector(product.selectVariant(_:)), cornerRadius: 5, bordercolor: #colorLiteral(red: 0.4235294118, green: 0.2235294118, blue: 0.5921568627, alpha: 1), bkcolor: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), txtcolor: #colorLiteral(red: 0.4274509804, green: 0.2235294118, blue: 0.5960784314, alpha: 1), view: product.variantscroll.scrollview)
@@ -416,8 +298,12 @@ class p: UIView {
         }
     }
     @objc func selectVariant(_ btn:UIButton){
+        
+        showProductConfig(id: btn.tag)
+        
+        
         print("selectvariant: \(btn.tag)")
-        for i in 0..<productdetail.variantlist.count {
+        for i in 0..<product.variantlist.count {
             if productdetail.variantlist[i].id == btn.tag {
                 productdetail.variantlist[i].isSelected = true
                 btn.backgroundColor = #colorLiteral(red: 0.4235294118, green: 0.2235294118, blue: 0.5921568627, alpha: 1)
@@ -429,10 +315,35 @@ class p: UIView {
                 product.variantlist[i].button.tintColor = #colorLiteral(red: 0.4235294118, green: 0.2235294118, blue: 0.5921568627, alpha: 1)
             }
         }
+        product.configlistCellview()
     }
     
     
-    
+    func showProductConfig(id:Int) {
+        let id  = productdetail.variantlist.filter{$0.id == id}.first.map{$0.id}
+        productdetail.configlist.removeAll()
+        
+        for obj in productconfigdetail
+        {
+            let objid = obj.customAttributes?.filter{$0.attributeCode == "variant_ntde"}.first.map{$0.value?.string()}
+            if(objid == "\(id ?? 0)")
+            {
+                let obj1 = obj.customAttributes?.filter{$0.attributeCode == "product_config_ntde"}.first
+                print("---- show cntd  \(obj1.map{$0.value?.string()})")
+                let objid = obj1.map{$0.value?.string()}
+                
+                let pro = pcoptions.values.filter{$0.valueIndex.tostring() == objid}.first!
+                
+                let list:clist = clist()
+                
+                list.id = (pro.valueIndex)
+                list.title = (pro.name)
+                list.price = obj.price!
+                productdetail.configlist.append(list)
+            }
+        }
+        product.configlistCellview()
+    }
     
     
     
@@ -493,6 +404,9 @@ class p: UIView {
             product.cqty.append(q)
         }
         
+        
+        
+        product.layoutUpdate()
     }
     
     @objc func selectConfig(_ btn:UIButton){
@@ -581,6 +495,25 @@ class p: UIView {
     }
     
     func layoutUpdate() {
+        var qy = CGFloat()
+        if product.discount.label.isHidden {
+            qy = product.clistscroll.scrollview.frame.maxY+10}
+        else{qy = product.price.label.frame.maxY+10}
+        product.quantity.autoSizelabel.frame.origin.y = qy
+        product.quantity.txtfield.frame.origin.y = qy
+        product.favouriteicon.checkBox.frame.origin.y = qy
+        
+        product.updateQuotebtn.button.frame.origin.y = product.quantity.autoSizelabel.frame.maxY+20
+        product.addtoCartbtn.button.frame.origin.y = product.quantity.autoSizelabel.frame.maxY+20
+        product.addtoQuotebtn.button.frame.origin.y = product.quantity.autoSizelabel.frame.maxY+20
+        var dy:CGFloat = product.addtoCartbtn.button.frame.maxY+50
+        if product.updateQuotebtn.button.isHidden == false
+        {
+            dy = product.updateQuotebtn.button.frame.maxY+50
+        }
+        
+        product.detail.view.frame.origin.y = dy
+        product.detailbody.label.frame.origin.y = product.detail.view.frame.maxY+10
         var morey = product.detailbody.label.frame.maxY+10
         if product.detailbody.label.isHidden {morey = product.detail.view.frame.maxY+10}
         product.moreinfo.view.frame.origin.y = morey
@@ -595,5 +528,100 @@ class p: UIView {
         product.body.view.frame.size.height = product.note.label.frame.maxY
         product.parentbody.contentSize.height = product.body.view.frame.maxY
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    // MARK:- BUTTONS
+    /*--------------------------------------------------------------*/
+
+    ///////////////////////////////////////////
+    //////////////////////////////////////////
+    //////////////////// BUTTON
+    //////////////////////////////////////////
+    @objc func quoteButton(_ btn:UIButton){
+        quotepop.create(quotebtn: btn, inview: product.parentbody)
+    }
+    ///////////////////////////////////////////
+    //////////////////////////////////////////
+    //////////////////// BUTTON
+    //////////////////////////////////////////
+    @objc func productimageClicked(){
+        print("image clicked")
+    }
+    ///////////////////////////////////////////
+    //////////////////////////////////////////
+    //////////////////// BUTTON
+    //////////////////////////////////////////
+    @objc func favouriteButton(){
+        print("Favourite")
+    }
+    ///////////////////////////////////////////
+    //////////////////////////////////////////
+    //////////////////// BUTTON
+    //////////////////////////////////////////
+    @objc func addtoCartButton(){
+        
+        let vc = AddtoCartAPIVC()
+                    var item = CartDatum()
+                    item.sku = productdetail.sku
+                    item.quoteID =  UserDefaults.standard.string(forKey: "quote_id")
+                    item.qty = Int(product.quantity.txtfield.text ?? "1")
+                    vc.item = item
+                vc.AddItemToCart()
+        
+    }
+    ///////////////////////////////////////////
+    //////////////////////////////////////////
+    //////////////////// BUTTON
+    //////////////////////////////////////////
+    @objc func addtoQuoteButton(){
+                print("add to quote")
+        
+        let addtoquote = AddtoQuoteAPIVC()
+        var item = CartDatum()
+        item.sku = productdetail.sku
+        item.quoteID =  ""
+        item.qty = Int(product.quantity.txtfield.text ?? "1")
+        addtoquote.item = item
+        let quote_id = UserDefaults.standard.value(forKey: "quoteToken") as? String
+        if(quote_id == nil || quote_id == "")
+        {
+            addtoquote.CreateQuote1()
+        }
+        else
+        {
+            addtoquote.requestser = addtoquote.manager.requestSerializer
+            addtoquote.quoteId = quote_id!
+            addtoquote.GetItemIdForQuote()
+        }
+        
+        
+    }
+    ///////////////////////////////////////////
+    //////////////////////////////////////////
+    //////////////////// BUTTON
+    //////////////////////////////////////////
+    @objc func submitReviewButton(){
+        print("submit Review")
+    }
+    
+    
+    ///////////////////////////////////////////
+    //////////////////////////////////////////
+    //////////////////// UPDATE QUOTE BUTTON
+    //////////////////////////////////////////
+    @objc func updateQuoteButton(){
+        print("update quote")
+    }
+    
+    /*--------------------------------------------------------------*/
+    
+    
     
 }

@@ -8,7 +8,8 @@
 
 import UIKit
 import AFNetworking
-
+import Alamofire
+import SwiftyJSON
 
 class Dashboard: UIViewController {
     
@@ -27,7 +28,46 @@ class Dashboard: UIViewController {
     /////////////// PROMOTION BUTTON
     //////////////////////////////////////////////
     @objc func promotionOfferButton(_ btn:UIButton){
-        promotion.create(login: true, view: bodyfor.promotion.scrollview)
+        print("tag: \(btn.tag)")
+        openSearchpage(heading: "Promotion Offers")
+        loaderStart()
+        Alamofire.request("https://www.dev.conektr.com/search_by_category.php?category_id=12",
+                          method: .get,
+                          parameters: nil,
+                          headers: ["Accept":"application/json"]).responseData { response in
+                            switch response.result {
+                            case .success(let data):
+                                let d = JSON(data)
+                                searchProductobj.removeAll()
+                                for obj in d["data"].arrayValue {
+                                    let o = ss()
+                                    o.distributorID = obj["distributor_id"].intValue
+                                    o.distributorName = obj["distributor_name"].stringValue
+                                    o.id = obj["id"].intValue
+                                    o.sku = obj["sku"].stringValue
+                                    o.title = obj["name"].stringValue
+                                    o.typeId = obj["type_id"].stringValue
+                                    
+                                    obj["custom_attributes"].arrayValue.filter{ "small_image" == $0["attribute_code"].stringValue}.first.map{
+                                        o.imagUrl = "https://www.dev.conektr.com/pub/media/catalog/product"+$0["value"].stringValue
+                                    }
+                                    obj["custom_attributes"].arrayValue.filter{ "pricing" == $0["attribute_code"].stringValue}.first.map{
+                                        o.price = $0["value"].doubleValue
+                                        o.pricing = $0["value"].stringValue
+                                    }
+                                    obj["custom_attributes"].arrayValue.filter{ "quantity_and_stock_status" == $0["attribute_code"].stringValue}.first.map{
+                                        o.quantity = $0["value"].intValue
+                                    }
+                                    searchProductobj.append(o)
+                                }
+                                self.openSearchpage(heading: "Promotion Offers")
+                                loaderEnd()
+                            case .failure(let err):
+                                print(err.localizedDescription)
+                            }
+        }
+        
+        
     }
     ///////////////////////////////////////////////
     //////////////////////////////////////////////
@@ -35,6 +75,95 @@ class Dashboard: UIViewController {
     //////////////////////////////////////////////
     @objc func SpecificCategorieButton(_ btn:UIButton){
         print("tag: \(btn.tag)")
+        openSearchpage(heading: "")
+        loaderStart()
+        Alamofire.request("https://www.dev.conektr.com/search_by_category.php?category_id=\(btn.tag)",
+            method: .get,
+            parameters: nil,
+            headers: ["Accept":"application/json"]).responseData { response in
+                switch response.result {
+                case .success(let data):
+                    let d = JSON(data)
+                    searchProductobj.removeAll()
+                    for obj in d["data"].arrayValue {
+                        let o = ss()
+                        o.distributorID = obj["distributor_id"].intValue
+                        o.distributorName = obj["distributor_name"].stringValue
+                        o.id = obj["id"].intValue
+                        o.sku = obj["sku"].stringValue
+                        o.title = obj["name"].stringValue
+                        o.typeId = obj["type_id"].stringValue
+                        
+                        obj["custom_attributes"].arrayValue.filter{ "small_image" == $0["attribute_code"].stringValue}.first.map{
+                            o.imagUrl = "https://www.dev.conektr.com/pub/media/catalog/product"+$0["value"].stringValue
+                        }
+                        obj["custom_attributes"].arrayValue.filter{ "pricing" == $0["attribute_code"].stringValue}.first.map{
+                            o.price = $0["value"].doubleValue
+                            o.pricing = $0["value"].stringValue
+                        }
+                        obj["custom_attributes"].arrayValue.filter{ "quantity_and_stock_status" == $0["attribute_code"].stringValue}.first.map{
+                            o.quantity = $0["value"].intValue
+                        }
+                        searchProductobj.append(o)
+                    }
+                    self.openSearchpage(heading: "")
+                    loaderEnd()
+                case .failure(let err):
+                    print(err.localizedDescription)
+                }
+        }
+        
+        
+        
+    }
+    
+    
+    func openSearchpage(heading:String){
+        search.create(heading: heading, login: UserDefaults.standard.bool(forKey: "IsLogined"), view: bodyfor.SearchResult.scrollview)
+        
+        // dashboard liked pages
+        AllCategories.disAppear()
+        allBrands.disAppear()
+        product.disAppear()
+        Distributor.disAppear()
+        //                search.disAppear()
+        bodyfor.compare.scrollview.isHidden = true
+        bodyfor.quotecart.scrollview.isHidden = true
+        bodyfor.submitquote.scrollview.isHidden = true
+        
+        //         footerBar
+        Searchpop.disAppear()
+        myCartpop.disAppear()
+        myAccountpop.disAppear()
+        menupop.disAppear()
+        
+        
+        
+        
+        // footerBar linked pages
+        
+        shoppingCart.disAppear()
+        Checkout.disAppear()
+        
+        SignIn.disAppear()
+        bodyfor.CreateAccount.scrollview.isHidden = true
+        bodyfor.forgotPassword.scrollview.isHidden = true
+        
+        bodyfor.myaccount.scrollview.isHidden = true
+        bodyfor.changepass.scrollview.isHidden = true
+        bodyfor.Editaccount.scrollview.isHidden = true
+        bodyfor.addressbook.scrollview.isHidden = true
+        bodyfor.Editaddress.scrollview.isHidden = true
+        bodyfor.addaddress.scrollview.isHidden = true
+        
+        bodyfor.orderlist.scrollview.isHidden = true
+        bodyfor.orderdetail.scrollview.isHidden = true
+        
+        bodyfor.shoplist.scrollview.isHidden = true
+        bodyfor.reorder.scrollview.isHidden = true
+        
+        bodyfor.quotelist.scrollview.isHidden = true
+        bodyfor.quotedetial.scrollview.isHidden = true
     }
     ///////////////////////////////////////////////
     //////////////////////////////////////////////
@@ -49,23 +178,54 @@ class Dashboard: UIViewController {
     //////////////////////////////////////////////
     @objc func specificBrandButton(_ btn:UIButton){
         print("brands \(btn.tag)")
+        openSearchpage(heading: allbrandobj.filter{$0.id == btn.tag}.first!.title)
+        loaderStart()
+        Alamofire.request("http://www.dev.conektr.com/search_by_brands.php?brand_id=\(btn.tag)",
+            method: .get,
+            parameters: nil,
+            headers: ["Accept":"application/json"]).responseData { response in
+                switch response.result {
+                case .success(let data):
+                    let d = JSON(data)
+                    searchProductobj.removeAll()
+                    for obj in d["data"].arrayValue {
+                        let o = ss()
+                        o.distributorID = obj["distributor_id"].intValue
+                        o.distributorName = obj["distributor_name"].stringValue
+                        o.id = obj["id"].intValue
+                        o.sku = obj["sku"].stringValue
+                        o.title = obj["name"].stringValue
+                        o.typeId = obj["type_id"].stringValue
+                        
+                        obj["custom_attributes"].arrayValue.filter{ "small_image" == $0["attribute_code"].stringValue}.first.map{
+                            o.imagUrl = "https://www.dev.conektr.com/pub/media/catalog/product"+$0["value"].stringValue
+                        }
+                        obj["custom_attributes"].arrayValue.filter{ "pricing" == $0["attribute_code"].stringValue}.first.map{
+                            o.price = $0["value"].doubleValue
+                            o.pricing = $0["value"].stringValue
+                        }
+                        obj["custom_attributes"].arrayValue.filter{ "quantity_and_stock_status" == $0["attribute_code"].stringValue}.first.map{
+                            o.quantity = $0["value"].intValue
+                        }
+                        searchProductobj.append(o)
+                    }
+                    self.openSearchpage(heading: allbrandobj.filter{$0.id == btn.tag}.first!.title)
+                    loaderEnd()
+                case .failure(let err):
+                    print(err.localizedDescription)
+                }
+        }
     }
     ///////////////////////////////////////////////
     //////////////////////////////////////////////
     /////////////// BUTTON  ALL BRANDS
     //////////////////////////////////////////////
-//    @objc func ShowAllBrandsButton(_ btn:UIButton){
-//        allBrands.Create(images: brandsimg as! [UIImage], view: bodyfor.AllBrands.scrollview)
-//    }
     
-            @objc func ShowAllBrandsButton(_ btn:UIButton){
-    //        allBrands.Create(images: brandsimg as! [UIImage], view: bodyfor.AllBrands.scrollview)
-            let imgUrls:[String] = allbrandobj.map {$0.imgurl}
-            let images:[UIImage] = allbrandobj.map {$0.image}
-            
-            allBrands.Create(images: images, view: bodyfor.AllBrands.scrollview, imgUrl: imgUrls)
-            
-        }
+    @objc func ShowAllBrandsButton(_ btn:UIButton){
+        
+        allBrands.Create(view: bodyfor.AllBrands.scrollview)
+        
+    }
     
     ///////////////////////////////////////////////
     //////////////////////////////////////////////
@@ -73,24 +233,24 @@ class Dashboard: UIViewController {
     //////////////////////////////////////////////
     @objc func AddAllCheckedProduct(){
         
-//        let items = productobj.filter{$0.isSelected == true}
-//        if(items.count == 0)
-//        {
-//            AlertHelper.showErrorAlert(WithTitle: "Alert", Message: "No Product Selected", Sender: self)
-//            return
-//        }
-//        else{
-//        print("check added")
-//        let vc = AddtoCartAPIVC()
-//            let ItemtoAdd = productobj.filter{$0.isSelected == true}.first
-//            var item = CartItem()
-//            item.sku = ItemtoAdd?.sku
-//            item.quoteID =  UserDefaults.standard.string(forKey: "quote_id")
-//            item.qty = ItemtoAdd?.quantity
-//            vc.item = item
-//            vc.ItemtoAdd = productobj.filter{$0.isSelected == true}
-//        vc.AddItemToCart()
-//        }
+        //        let items = productobj.filter{$0.isSelected == true}
+        //        if(items.count == 0)
+        //        {
+        //            AlertHelper.showErrorAlert(WithTitle: "Alert", Message: "No Product Selected", Sender: self)
+        //            return
+        //        }
+        //        else{
+        //        print("check added")
+        //        let vc = AddtoCartAPIVC()
+        //            let ItemtoAdd = productobj.filter{$0.isSelected == true}.first
+        //            var item = CartItem()
+        //            item.sku = ItemtoAdd?.sku
+        //            item.quoteID =  UserDefaults.standard.string(forKey: "quote_id")
+        //            item.qty = ItemtoAdd?.quantity
+        //            vc.item = item
+        //            vc.ItemtoAdd = productobj.filter{$0.isSelected == true}
+        //        vc.AddItemToCart()
+        //        }
     }
     ///////////////////////////////////////////////
     //////////////////////////////////////////////
@@ -126,10 +286,10 @@ class Dashboard: UIViewController {
                     
                     
                     if productdetail.typeId == "configurable" {
-                                            let prodetailop = ProductOptionAPIVC()
-//                                            prodetailop.GetProductOptions(sku: productdetail.sku)
-                                            prodetailop.GetProductandConfigOptions(sku: productdetail.sku)
-                                        }
+                        let prodetailop = ProductOptionAPIVC()
+                        //                                            prodetailop.GetProductOptions(sku: productdetail.sku)
+                        prodetailop.GetProductandConfigOptions(sku: productdetail.sku)
+                    }
                     //                    let op = pricingoption.filter{$0.value == obj.pricing}
                     //                    let op1 = variantoption.filter{$0.value == obj.variant}
                     //                    let op2 = productconfigoption.filter{$0.value == obj.config}
@@ -141,7 +301,7 @@ class Dashboard: UIViewController {
             product.create(updateQuote: false, view: bodyfor.product.scrollview)
             tap.view?.layer.shadowOpacity = 0
         }
-       }
+    }
     ///////////////////////////////////////////////
     //////////////////////////////////////////////
     /////////////// PRODUCT FAVOURITE BUTTON
@@ -151,7 +311,7 @@ class Dashboard: UIViewController {
             btn.setBackgroundImage(UIImage(named: "hearttrue")!, for: .normal)
             for obj in pbarbtn {
                 if obj.clickableimg.tag == btn.tag {
-                obj.clickableimg.setBackgroundImage(UIImage(named: "barfalse")!, for: .normal)
+                    obj.clickableimg.setBackgroundImage(UIImage(named: "barfalse")!, for: .normal)
                 }
             }
         }
@@ -298,24 +458,55 @@ class Dashboard: UIViewController {
     /////////////// SEARCH RESULT BUTTON
     //////////////////////////////////////////////
     @objc func SearchButton(_ btn:UIButton){
+        if Searchpop.search.txtfield.text == "" {
+            showAlert(title: "Error", text: "please type something to search!")
+            
+        }
+        else{
+            //            let searchresultAPi = SearchProductAPIVC()
+            //            let str = "%" + Searchpop.search.txtfield.text! + "%"
+            //            searchresultAPi.GetSearchResult(str: str)
+            //            openSearchpage(heading: "")
+            
+            openSearchpage(heading: Searchpop.search.txtfield.text!)
+            loaderStart()
+            Alamofire.request("https://www.dev.conektr.com/search.php?query=\(Searchpop.search.txtfield.text!)",
+                method: .get,
+                parameters: nil,
+                headers: ["Accept":"application/json"]).responseData { response in
+                    switch response.result {
+                    case .success(let data):
+                        let d = JSON(data)
+                        searchProductobj.removeAll()
+                        for obj in d["data"].arrayValue {
+                            let o = ss()
+                            o.distributorID = obj["distributor_id"].intValue
+                            o.distributorName = obj["distributor_name"].stringValue
+                            o.id = obj["id"].intValue
+                            o.sku = obj["sku"].stringValue
+                            o.title = obj["name"].stringValue
+                            o.typeId = obj["type_id"].stringValue
+                            
+                            obj["custom_attributes"].arrayValue.filter{ "small_image" == $0["attribute_code"].stringValue}.first.map{
+                                o.imagUrl = "https://www.dev.conektr.com/pub/media/catalog/product"+$0["value"].stringValue
+                            }
+                            obj["custom_attributes"].arrayValue.filter{ "pricing" == $0["attribute_code"].stringValue}.first.map{
+                                o.price = $0["value"].doubleValue
+                                o.pricing = $0["value"].stringValue
+                            }
+                            obj["custom_attributes"].arrayValue.filter{ "quantity_and_stock_status" == $0["attribute_code"].stringValue}.first.map{
+                                o.quantity = $0["value"].intValue
+                            }
+                            searchProductobj.append(o)
+                        }
+                        self.openSearchpage(heading: Searchpop.search.txtfield.text!)
+                        loaderEnd()
+                    case .failure(let err):
+                        print(err.localizedDescription)
+                    }
+            }
+        }
         
-        
-        let searchresultAPi = SearchProductAPIVC()
-        let str = "%" + Searchpop.search.txtfield.text! + "%"
-        searchresultAPi.GetSearchResult(str: str)
-//        // footerBar
-//        Searchpop.disAppear()
-//
-//        // footerBar linked pages
-//        shoppingCart.disAppear()
-//        Checkout.disAppear()
-//        SignIn.disAppear()
-//        createAccount.disAppear()
-//        forgotpassword.disAppear()
-        
-        
-//        searchResult.Create(view: bodyfor.SearchResult.scrollview)
-//        search.create(login: UserDefaults.standard.bool(forKey: "IsLogined"), view: bodyfor.SearchResult.scrollview)
     }
     
     ///////////////////////////////////////////////
@@ -323,7 +514,7 @@ class Dashboard: UIViewController {
     /////////////// SHOPPING CART BUTTON
     //////////////////////////////////////////////
     @objc func myCartViewCartButton(_ btn:UIButton){
-               
+        
         // footerBar
         myCartpop.disAppear()
         
@@ -332,7 +523,7 @@ class Dashboard: UIViewController {
         Checkout.disAppear()
         SignIn.disAppear()
         bodyfor.CreateAccount.scrollview.isHidden = true
-        forgotpassword.disAppear()
+        bodyfor.forgotPassword.scrollview.isHidden = true
         
         shoppingCart.Create(view: bodyfor.ShoppingCart.scrollview)
     }
@@ -341,16 +532,16 @@ class Dashboard: UIViewController {
     /////////////// CHECKOUT BUTTON
     //////////////////////////////////////////////
     @objc func myCartCheckoutButton(_ btn:UIButton){
-               
+        
         // footerBar
         myCartpop.disAppear()
-               
+        
         // footerBar linked pages
         search.disAppear() //searchResult.disAppear()
         shoppingCart.disAppear()
         SignIn.disAppear()
         bodyfor.CreateAccount.scrollview.isHidden = true
-        forgotpassword.disAppear()
+        bodyfor.forgotPassword.scrollview.isHidden = true
         
         
         Checkout.create(view: bodyfor.Checkout.scrollview)
@@ -368,13 +559,13 @@ class Dashboard: UIViewController {
         else{
             // footerBar
             myAccountpop.disAppear()
-                   
+            
             // footerBar linked pages
             search.disAppear() //searchResult.disAppear()
             shoppingCart.disAppear()
             Checkout.disAppear()
             bodyfor.CreateAccount.scrollview.isHidden = true
-            forgotpassword.disAppear()
+            bodyfor.forgotPassword.scrollview.isHidden = true
             
             SignIn.Create(view: bodyfor.Signin.scrollview)
         }
@@ -392,10 +583,12 @@ class Dashboard: UIViewController {
         shoppingCart.disAppear()
         Checkout.disAppear()
         SignIn.disAppear()
-        forgotpassword.disAppear()
+        bodyfor.forgotPassword.scrollview.isHidden = true
         
         
         bodyfor.CreateAccount.scrollview.isHidden = false
+        addchildview(parent: self, child: storyboardView(boardName: "createAccountVC", pageID: "createAccountVC"), view: bodyfor.CreateAccount.scrollview)
+        
     }
     ///////////////////////////////////////////////
     //////////////////////////////////////////////
@@ -405,7 +598,7 @@ class Dashboard: UIViewController {
         
         // footerBar
         myAccountpop.disAppear()
-               
+        
         // footerBar linked pages
         search.disAppear()//searchResult.disAppear()
         shoppingCart.disAppear()
@@ -413,7 +606,8 @@ class Dashboard: UIViewController {
         SignIn.disAppear()
         bodyfor.CreateAccount.scrollview.isHidden = true
         
-        forgotpassword.Create(view: bodyfor.forgotPassword.scrollview)
+        bodyfor.forgotPassword.scrollview.isHidden = false
+        addchildview(parent: self, child: storyboardView(boardName: "forgotpass", pageID: "forgotpassVC"), view: bodyfor.forgotPassword.scrollview)
     }
     
     ////////////////////////////////////////////////
@@ -424,7 +618,7 @@ class Dashboard: UIViewController {
         quotepop.create(quotebtn: quotebtn.clickableimg, inview: bodyscroll.scrollview)
     }
     /*---------------------------------------------------------------*/
-
+    
     
     
     
@@ -470,6 +664,7 @@ class Dashboard: UIViewController {
     
     
     // categories
+    let categoriesStaticId = [0,3,7,6,29,32]
     let categoriesStaticName = ["All Categories","Beverages","Biscuits","Confectionery","Oil","Tobacco"]
     let categoriesStaticimages = [UIImage(named: "static_All Categories"),
                                   UIImage(named: "static_Beverages"),
@@ -520,10 +715,9 @@ class Dashboard: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         view.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
-                
         
-//        let options = ProductOptionAPIVC()
-//        options.GetOptions()
+        //        let options = ProductOptionAPIVC()
+        //        options.GetOptions()
         
         
         let conregion = CountryAndRegionVC()
@@ -560,7 +754,6 @@ class Dashboard: UIViewController {
         
         bodyfor.quotecart.ScrollView(x: 0, y: 30, width: x, height: y-100, bkcolor: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), contentwidth: x, contentheight: y-70, view: view)
         bodyfor.quotecart.scrollview.isHidden = true
-//        addchildview(parent: self, child: storyboardView(boardName: "main", pageID: "quoteCartVC"), view: bodyfor.quotecart.scrollview)
         
         bodyfor.submitquote.ScrollView(x: 0, y: 30, width: x, height: y-100, bkcolor: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), contentwidth: x, contentheight: y-70, view: view)
         bodyfor.submitquote.scrollview.isHidden = true
@@ -570,6 +763,7 @@ class Dashboard: UIViewController {
         
         
         //FOOTER LINKED
+        
         bodyfor.SearchResult.ScrollView(x: 0, y: 30, width: x, height: y-100, bkcolor: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), contentwidth: x, contentheight: y-70, view: view)
         bodyfor.SearchResult.scrollview.isHidden = true
         
@@ -584,7 +778,6 @@ class Dashboard: UIViewController {
         
         bodyfor.CreateAccount.ScrollView(x: 0, y: 30, width: x, height: y-100, bkcolor: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), contentwidth: x, contentheight: y-70, view: view)
         bodyfor.CreateAccount.scrollview.isHidden = true
-        addchildview(parent: self, child: storyboardView(boardName: "createAccountVC", pageID: "createAccountVC"), view: bodyfor.CreateAccount.scrollview)
         
         
         bodyfor.forgotPassword.ScrollView(x: 0, y: 30, width: x, height: y-100, bkcolor: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), contentwidth: x, contentheight: y-70, view: view)
@@ -592,27 +785,39 @@ class Dashboard: UIViewController {
         
         bodyfor.myaccount.ScrollView(x: 0, y: 30, width: x, height: y-100, bkcolor: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), contentwidth: x, contentheight: y-70, view: view)
         bodyfor.myaccount.scrollview.isHidden = true
-        addchildview(parent: self, child: MYAccount(), view: bodyfor.myaccount.scrollview)
+        
+        bodyfor.changepass.ScrollView(x: 0, y: 30, width: x, height: y-100, bkcolor: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), contentwidth: x, contentheight: y-70, view: view)
+        bodyfor.changepass.scrollview.isHidden = true
         
         bodyfor.Editaccount.ScrollView(x: 0, y: 30, width: x, height: y-100, bkcolor: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), contentwidth: x, contentheight: y-70, view: view)
         bodyfor.Editaccount.scrollview.isHidden = true
-        addchildview(parent: self, child: EditAccountInformationVC(), view: bodyfor.Editaccount.scrollview)
         
         bodyfor.addressbook.ScrollView(x: 0, y: 30, width: x, height: y-100, bkcolor: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), contentwidth: x, contentheight: y-70, view: view)
         bodyfor.addressbook.scrollview.isHidden = true
-        addchildview(parent: self, child: AddressBookVC(), view: bodyfor.addressbook.scrollview)
         
         bodyfor.Editaddress.ScrollView(x: 0, y: 30, width: x, height: y-100, bkcolor: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), contentwidth: x, contentheight: y-70, view: view)
         bodyfor.Editaddress.scrollview.isHidden = true
-        addchildview(parent: self, child: EditAddressVC(), view: bodyfor.Editaddress.scrollview)
+        
+        bodyfor.addaddress.ScrollView(x: 0, y: 30, width: x, height: y-100, bkcolor: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), contentwidth: x, contentheight: y-70, view: view)
+        bodyfor.addaddress.scrollview.isHidden = true
         
         bodyfor.orderlist.ScrollView(x: 0, y: 30, width: x, height: y-100, bkcolor: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), contentwidth: x, contentheight: y-70, view: view)
         bodyfor.orderlist.scrollview.isHidden = true
-        addchildview(parent: self, child: orderlistVC(), view: bodyfor.orderlist.scrollview)
+        
+        bodyfor.orderdetail.ScrollView(x: 0, y: 30, width: x, height: y-100, bkcolor: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), contentwidth: x, contentheight: y-70, view: view)
+        bodyfor.orderdetail.scrollview.isHidden = true
+        
         bodyfor.shoplist.ScrollView(x: 0, y: 30, width: x, height: y-100, bkcolor: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), contentwidth: x, contentheight: y-70, view: view)
         bodyfor.shoplist.scrollview.isHidden = true
-        addchildview(parent: self, child: shoplistVC(), view: bodyfor.shoplist.scrollview)
         
+        bodyfor.reorder.ScrollView(x: 0, y: 30, width: x, height: y-100, bkcolor: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), contentwidth: x, contentheight: y-70, view: view)
+        bodyfor.reorder.scrollview.isHidden = true
+        
+        bodyfor.quotelist.ScrollView(x: 0, y: 30, width: x, height: y-100, bkcolor: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), contentwidth: x, contentheight: y-70, view: view)
+        bodyfor.quotelist.scrollview.isHidden = true
+        
+        bodyfor.quotedetial.ScrollView(x: 0, y: 30, width: x, height: y-100, bkcolor: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), contentwidth: x, contentheight: y-70, view: view)
+        bodyfor.quotedetial.scrollview.isHidden = true
         
         
         
@@ -644,7 +849,7 @@ class Dashboard: UIViewController {
         addCatageries(image: categoriesStaticimages as! [UIImage], title: categoriesStaticName)
         let ac = AllCategoriesAPIVC()
         ac.GetAllCategories()
-
+        
         
         
         ///////////////////////////////////////////////// BRAND
@@ -664,9 +869,9 @@ class Dashboard: UIViewController {
         
         check[0].button.titleLabel?.lineBreakMode = NSLineBreakMode.byCharWrapping
         
-//        check[0].clickableimg.isHidden = true
-//        check[0].label.isHidden = true
-//        check[0].button.isHidden = true
+        //        check[0].clickableimg.isHidden = true
+        //        check[0].label.isHidden = true
+        //        check[0].button.isHidden = true
         
         
         
@@ -675,7 +880,6 @@ class Dashboard: UIViewController {
         //////////////////////////////////////////////// FEATURED PRODUCTS
         productLayout.Label(x: 10, y: check[0].label.frame.maxY+10, width: 250, height: 40, txt: "FEATURED PRODUCTS", fontsize: 16, bold: false, cornerRadius: 0, border: 0, borderColor: UIColor.clear, alignment: .left, bkcolor: .clear, txtcolor: #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), view: bodyscroll.scrollview)
         productLayout.View(x: 15, y: productLayout.label.frame.maxY, width: x-30, height: 200, bkcolor: .clear, cornerRadius: 0, border: 0, borderColor: .clear, view: bodyscroll.scrollview)
-        
         let fp = FeatureProductApiVC()
         fp.FeaturesProduct()
         addProduct(isSignedin: UserDefaults.standard.bool(forKey: "IsLogined"))
@@ -689,9 +893,9 @@ class Dashboard: UIViewController {
         check[1].Button(x: check[1].label.frame.maxX, y: productLayout.view.frame.maxY+10, width: 230, height: 60, title: "ADD ALL PRODUCTS TO CART \n (TOTAL PRODUCT: 0)", fontsize: 14, any: self, function: #selector(AddAllCheckedProduct), cornerRadius: 10, bordercolor: .clear, bkcolor: #colorLiteral(red: 0.4375680685, green: 0.2701445818, blue: 0.6246482134, alpha: 1), txtcolor: #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), view: bodyscroll.scrollview)
         check[1].button.titleLabel?.lineBreakMode = NSLineBreakMode.byCharWrapping
         
-//        check[1].clickableimg.isHidden = true
-//        check[1].label.isHidden = true
-//        check[1].button.isHidden = true
+        //        check[1].clickableimg.isHidden = true
+        //        check[1].label.isHidden = true
+        //        check[1].button.isHidden = true
         
         //////////////////////////////////////
         //////////////////////////////////////
@@ -699,8 +903,8 @@ class Dashboard: UIViewController {
         /////////////////////////////////////
         /////////////////////////////////////
         bodyscroll.scrollview.contentSize.height = check[1].label.frame.maxY+10
-//        y-bodyscroll.scrollview.frame.size.height
-        footer.View(x: 0, y: bodyscroll.scrollview.frame.size.height+bodyscroll.scrollview.frame.minY, width: x, height: 50, bkcolor: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), cornerRadius: 0, border: 0, borderColor: .clear, view: view)
+        //        y-bodyscroll.scrollview.frame.size.height
+        footer.View(x: 0, y: bodyscroll.scrollview.frame.size.height+bodyscroll.scrollview.frame.minY, width: x, height: 70, bkcolor: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), cornerRadius: 0, border: 0, borderColor: .clear, view: view)
         FooterMenu.Create(any: self,
                           homeBtn: #selector(barhomeButton),
                           searchBtn: #selector(barsearchButton(_:)),
@@ -749,7 +953,7 @@ class Dashboard: UIViewController {
         allBrands.disAppear()
         product.disAppear()
         Distributor.disAppear()
-        promotion.disAppear()
+        search.disAppear()
         bodyfor.compare.scrollview.isHidden = true
         bodyfor.quotecart.scrollview.isHidden = true
         bodyfor.submitquote.scrollview.isHidden = true
@@ -761,85 +965,66 @@ class Dashboard: UIViewController {
         menupop.disAppear()
         
         // footerBar linked pages
-        search.disAppear()//searchResult.disAppear()
+        search.disAppear()
+        
         shoppingCart.disAppear()
         Checkout.disAppear()
+        
         SignIn.disAppear()
         bodyfor.CreateAccount.scrollview.isHidden = true
-        forgotpassword.disAppear()
+        bodyfor.forgotPassword.scrollview.isHidden = true
+        
         bodyfor.myaccount.scrollview.isHidden = true
+        bodyfor.changepass.scrollview.isHidden = true
         bodyfor.Editaccount.scrollview.isHidden = true
-        bodyfor.Editaddress.scrollview.isHidden = true
         bodyfor.addressbook.scrollview.isHidden = true
+        bodyfor.Editaddress.scrollview.isHidden = true
+        bodyfor.addaddress.scrollview.isHidden = true
+        
         bodyfor.orderlist.scrollview.isHidden = true
+        bodyfor.orderdetail.scrollview.isHidden = true
+        
         bodyfor.shoplist.scrollview.isHidden = true
-
+        bodyfor.reorder.scrollview.isHidden = true
+        
+        bodyfor.quotelist.scrollview.isHidden = true
+        bodyfor.quotedetial.scrollview.isHidden = true
+        
     }
     @objc func barsearchButton(_ tap:UITapGestureRecognizer){
         FooterMenu.ButtonClicked(home: false, search: true, myCart: false, myAccount: false, menu: false)
         bodyfor.pop.scrollview.subviews.last?.removeFromSuperview()
         Searchpop.Create(any: self, searchBtn: #selector(SearchButton(_:)), withinview: bodyfor.pop.scrollview)
     }
-//    @objc func barmyCartButton(_ tap:UITapGestureRecognizer){
-//        FooterMenu.ButtonClicked(home: false, search: false, myCart: true, myAccount: false, menu: false)
-//        myCartpop.Create(any: self, viewCartBtn: #selector(myCartViewCartButton(_:)), checkoutBtn: #selector(myCartCheckoutButton(_:)), view: bodyfor.pop.scrollview)
-//    }
-    
-            // MARK: - DashBoard Changes By Mahad
-        @objc func barmyCartButton(_ tap:UITapGestureRecognizer){
+    //    @objc func barmyCartButton(_ tap:UITapGestureRecognizer){
     //        FooterMenu.ButtonClicked(home: false, search: false, myCart: true, myAccount: false, menu: false)
     //        myCartpop.Create(any: self, viewCartBtn: #selector(myCartViewCartButton(_:)), checkoutBtn: #selector(myCartCheckoutButton(_:)), view: bodyfor.pop.scrollview)
-            
-            AlertHelper.showLoadingAlert(WithTitle: "Loading...", OnView: self.view, Animated: false)
-            FooterMenu.ButtonClicked(home: false, search: false, myCart: true, myAccount: false, menu: false)
-            bodyfor.pop.scrollview.subviews.last?.removeFromSuperview()
-            let cartApi = GetCartAPIVC()
-            cartApi.GetCart()
-        }
+    //    }
+    
+    // MARK: - DashBoard Changes By Mahad
+    @objc func barmyCartButton(_ tap:UITapGestureRecognizer){
+        
+        AlertHelper.showLoadingAlert(WithTitle: "Loading...", OnView: self.view, Animated: false)
+        FooterMenu.ButtonClicked(home: false, search: false, myCart: true, myAccount: false, menu: false)
+        bodyfor.pop.scrollview.subviews.last?.removeFromSuperview()
+        let cartApi = GetCartAPIVC()
+        cartApi.GetCart()
+    }
     
     @objc func barmyAccountButton(_ tap:UITapGestureRecognizer){
         FooterMenu.ButtonClicked(home: false, search: false, myCart: false, myAccount: true, menu: false)
         bodyfor.pop.scrollview.subviews.last?.removeFromSuperview()
+        //        UserDefaults.standard.bool(forKey: "IsLogined")
         myAccountpop.Create(islogedin: UserDefaults.standard.bool(forKey: "IsLogined"), any: self, signinBtn: #selector(signInButton(_:)), createAccountBtn: #selector(createAccountButton(_:)), forgotpassBtn: #selector(forgotpasswordButton(_:)), withinview: bodyfor.pop.scrollview)
     }
     @objc func barmenuButton(_ tap:UITapGestureRecognizer){
         FooterMenu.ButtonClicked(home: false, search: false, myCart: false, myAccount: false, menu: true)
-        
-                if( bodyfor.pop.scrollview.subviews.last?.classForCoder == MenuPopView.classForCoder())
-                         {
-                          bodyfor.pop.scrollview.isHidden = true
-                          bodyfor.pop.scrollview.subviews.last?.removeFromSuperview()
-                       FooterMenu.menuButton(clicked: false)
-                          }
-               else
-               {
-               let myCustomView = Bundle.main.loadNibNamed("MenuPopView", owner: self, options: nil)![0] as? MenuPopView
-                   myCustomView?.AddItemsInTableView()
-               var frame = myCustomView?.frame
-               frame?.origin.x = 0
-               frame?.origin.y = y-70
-               frame?.size.width = bodyfor.pop.scrollview.frame.size.width
-               frame?.size.height = myCustomView!.mainview.frame.maxY
-               myCustomView?.frame = frame!
-               bodyfor.pop.scrollview.addSubview(myCustomView!)
-               Searchpop.body.view.frame.origin.y = y-70
-               FooterMenu.searchButton(clicked: false)
-               myCartpop.body.scrollview.frame.origin.y = y-70
-               FooterMenu.myCartButton(clicked: false)
-               myAccountpop.body.view.frame.origin.y = y-70
-               FooterMenu.myAccountButton(clicked: false)
-               
-               UIView.animate(withDuration: 0.2) {
-                   bodyfor.pop.scrollview.isHidden = false
-                   myCustomView!.frame.origin.y = y-70-myCustomView!.frame.size.height
-               }
-               }
-//        menupop.Create(withinview: bodyfor.pop.scrollview)
+        menupop.Create(withinview: bodyfor.pop.scrollview)
     }
     
     
     var popoverController:UIPopoverPresentationController?
-
+    
     
     
     
@@ -882,38 +1067,49 @@ class Dashboard: UIViewController {
     //////////////////////////////////////////////////
     /////////////////////////////////////////////////
     ///////// CART POP
-    let popview = UI()
-    let l = UI()
-    let popimag = UI()
-    let poptitle = UI()
-    let popdes = UI()
-    let popcheckoutbtn = UI()
-    let popviewcartbtn = UI()
-    let popshopbtn = UI()
+    
     
     func cartpopUI(id:Int){
-//        bodyfor.cartpop.scrollview.isHidden = false
-//
-//        popview.View(x: 20, y: (y/2)-250, width: x-40, height: 500, bkcolor: #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), cornerRadius: 5, border: 0, borderColor: .clear, view: bodyfor.cartpop.scrollview)
-//        popview.clickableimage(x: popview.view.frame.maxX-15, y: popview.view.frame.minY-15, width: 30, height: 30, image: UIImage(named: "x")!, cornerRadius: 0, borderWidth: 0, borderColor: .clear, function: #selector(popcancle(_:)), any: self, view: bodyfor.cartpop.scrollview)
-//        popview.clickableimg.tag = id
-//        popview.Label(x: 0, y: 0, width: x-40, height: 40, txt: "Shopping Cart", fontsize: 14, bold: false, cornerRadius: 0, border: 0, borderColor: .clear, alignment: .center, bkcolor: .clear, txtcolor: #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), view: popview.view)
-//
-//        l.Label(x: 0, y: popview.label.frame.maxY, width: x-40, height: 50, txt: "You have added following items to the cart:", fontsize: 14, bold: false, cornerRadius: 0, border: 0, borderColor: .clear, alignment: .center, bkcolor: .clear, txtcolor: #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), view: popview.view)
-//
-//        popimag.Image(x: 40, y: l.label.frame.maxY, width: x-120, height: x-120, mode: .scaleAspectFit, src: productobj[id].imag.imag.image!, view: popview.view)
-//
-//        poptitle.Label(x: 0, y: popimag.imag.frame.maxY, width: x-40, height: 40, txt: productobj[id].title.label.text!, fontsize: 14, bold: false, cornerRadius: 0, border: 0, borderColor: .clear, alignment: .center, bkcolor: .clear, txtcolor: #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), view: popview.view)
-//        let q = Double(productobj[id].check.txtfield.text!)!
-//        let pt = productobj[id].price * q
-//        popdes.Label(x: 0, y: poptitle.label.frame.maxY, width: x-40, height: 50, txt: "There are \(productobj[id].check.txtfield.text!) items in your cart. \nCart Subtotal: AED\(pt)", fontsize: 14, bold: false, cornerRadius: 0, border: 0, borderColor: .clear, alignment: .center, bkcolor: .clear, txtcolor: #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), view: popview.view)
-//        popcheckoutbtn.Button(x: (popview.view.frame.size.width/2)-100, y: popdes.label.frame.maxY, width: 200, height: 30, title: "goto Checkout", any: self, function: #selector(popCheckoutButton(_:)), cornerRadius: 0, bordercolor: .clear, bkcolor: .clear, txtcolor: #colorLiteral(red: 0.2196078449, green: 0.007843137719, blue: 0.8549019694, alpha: 1), view: popview.view)
-//        popcheckoutbtn.button.tag = id
-//        popviewcartbtn.Button(x: (popview.view.frame.size.width/2)-130, y: popcheckoutbtn.button.frame.maxY, width: 100, height: 40, title: "View Cart", any: self, function: #selector(popviewcartButton(_:)), cornerRadius: 5, bordercolor: .clear, bkcolor: #colorLiteral(red: 0.4274509804, green: 0.2705882353, blue: 0.6039215686, alpha: 1), txtcolor: #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), view: popview.view)
-//        popviewcartbtn.button.tag = id
-//        popshopbtn.Button(x: (popview.view.frame.size.width/2)-20, y: popcheckoutbtn.button.frame.maxY, width: 150, height: 40, title: "Continue Shopping", any: self, function: #selector(popcancle(_:)), cornerRadius: 5, bordercolor: .clear, bkcolor: #colorLiteral(red: 0.4274509804, green: 0.2705882353, blue: 0.6039215686, alpha: 1), txtcolor: #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), view: popview.view)
-//        popview.view.frame.size.height = popshopbtn.button.frame.maxY + 10
-
+        bodyfor.cartpop.scrollview.isHidden = false
+        
+        let popview = UI()
+        let l = UI()
+        let popimag = UI()
+        let poptitle = UI()
+        let popdes = UI()
+        let popcheckoutbtn = UI()
+        let popviewcartbtn = UI()
+        let popshopbtn = UI()
+        
+        for i in 0..<productobj.count{
+            if productobj[i].id == id {
+                popview.View(x: 20, y: (y/2)-250, width: x-40, height: 500, bkcolor: #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), cornerRadius: 5, border: 0, borderColor: .clear, view: bodyfor.cartpop.scrollview)
+                // cross button
+                popview.clickableimage(x: popview.view.frame.maxX-15, y: popview.view.frame.minY-15, width: 30, height: 30, image: UIImage(named: "x")!, cornerRadius: 0, borderWidth: 0, borderColor: .clear, function: #selector(popcancle(_:)), any: self, view: bodyfor.cartpop.scrollview)
+                popview.clickableimg.tag = id
+                
+                // Shopping TITLE
+                popview.Label(x: 0, y: 0, width: x-40, height: 40, txt: "Shopping Cart", fontsize: 12, bold: true, cornerRadius: 0, border: 0, borderColor: .clear, alignment: .center, bkcolor: .clear, txtcolor: #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), view: popview.view)
+                
+                l.Label(x: 0, y: popview.label.frame.maxY, width: x-40, height: 50, txt: "You have added following items to the cart:", fontsize: 14, bold: false, cornerRadius: 0, border: 0, borderColor: .clear, alignment: .center, bkcolor: .clear, txtcolor: #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), view: popview.view)
+                
+                // PRODUCT IMAGE
+                popimag.Image(x: 40, y: l.label.frame.maxY, width: x-120, height: x-120, mode: .scaleAspectFit, src: pimag[i].imag.image ?? UIImage(), view: popview.view)
+                
+                poptitle.Label(x: 0, y: popimag.imag.frame.maxY, width: x-40, height: 40, txt: productobj.filter{$0.id == id}.first?.title ?? "n/a", fontsize: 14, bold: false, cornerRadius: 0, border: 0, borderColor: .clear, alignment: .center, bkcolor: .clear, txtcolor: #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), view: popview.view)
+                let q = Double(productobj[i].quantity)
+                let pt = productobj[i].price * q
+                popdes.Label(x: 0, y: poptitle.label.frame.maxY, width: x-40, height: 50, txt: "There are \(q) items in your cart. \nCart Subtotal: AED\((pt/100)*100)", fontsize: 12, bold: false, cornerRadius: 0, border: 0, borderColor: .clear, alignment: .center, bkcolor: .clear, txtcolor: #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), view: popview.view)
+                popcheckoutbtn.Button(x: (popview.view.frame.size.width/2)-100, y: popdes.label.frame.maxY, width: 200, height: 30, title: "goto Checkout", fontsize: 12, any: self, function: #selector(popCheckoutButton(_:)), cornerRadius: 0, bordercolor: .clear, bkcolor: .clear, txtcolor: #colorLiteral(red: 0.2196078449, green: 0.007843137719, blue: 0.8549019694, alpha: 1), view: popview.view)
+                popcheckoutbtn.button.tag = id
+                popviewcartbtn.Button(x: (popview.view.frame.size.width/2)-130, y: popcheckoutbtn.button.frame.maxY, width: 100, height: 40, title: "View Cart", fontsize: 12, any: self, function: #selector(popviewcartButton(_:)), cornerRadius: 5, bordercolor: .clear, bkcolor: #colorLiteral(red: 0.4274509804, green: 0.2705882353, blue: 0.6039215686, alpha: 1), txtcolor: #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), view: popview.view)
+                popviewcartbtn.button.tag = id
+                popshopbtn.Button(x: (popview.view.frame.size.width/2)-20, y: popcheckoutbtn.button.frame.maxY, width: 150, height: 40, title: "Continue Shopping", fontsize: 12, any: self, function: #selector(popcancle(_:)), cornerRadius: 5, bordercolor: .clear, bkcolor: #colorLiteral(red: 0.4274509804, green: 0.2705882353, blue: 0.6039215686, alpha: 1), txtcolor: #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), view: popview.view)
+                popview.view.frame.size.height = popshopbtn.button.frame.maxY + 10
+            }
+        }
+        
+        
     }
     
     
@@ -926,14 +1122,13 @@ class Dashboard: UIViewController {
         self.popcancle(btn)
         // footerBar
         myCartpop.disAppear()
-               
+        
         // footerBar linked pages
         search.disAppear()//searchResult.disAppear()
         shoppingCart.disAppear()
         SignIn.disAppear()
         bodyfor.CreateAccount.scrollview.isHidden = true
-        forgotpassword.disAppear()
-        
+        bodyfor.forgotPassword.scrollview.isHidden = true
         
         Checkout.create(view: bodyfor.Checkout.scrollview)
     }
@@ -948,7 +1143,7 @@ class Dashboard: UIViewController {
         Checkout.disAppear()
         SignIn.disAppear()
         bodyfor.CreateAccount.scrollview.isHidden = true
-        forgotpassword.disAppear()
+        bodyfor.forgotPassword.scrollview.isHidden = true
         
         shoppingCart.Create(view: bodyfor.ShoppingCart.scrollview)
     }
@@ -959,21 +1154,18 @@ class Dashboard: UIViewController {
     
     
     func addtoCart(id:Int) {
-        for obj in productobj {
-            if obj.id == id {
-                cartobj.append(cart())
-                cartobj[cartobj.count-1].distributorID = obj.distributorID
-                cartobj[cartobj.count-1].distributorName = obj.distributorName
-                cartobj[cartobj.count-1].id = obj.id
-                cartobj[cartobj.count-1].imag = obj.imag
-                cartobj[cartobj.count-1].title = obj.title
-                cartobj[cartobj.count-1].sku = obj.sku
-                cartobj[cartobj.count-1].price = obj.price
-                cartobj[cartobj.count-1].quantity = obj.quantity
-                cartobj[cartobj.count-1].variant = obj.variant
-                
-            }
+        
+        productobj.filter{$0.id == id}.first.map{
+            print("disid: \($0.distributorID)")
+            print("distname: \($0.distributorName)")
+            print("id: \($0.id)")
+            print("title: \($0.title)")
+            print("sku: \($0.sku)")
+            print("price: \($0.price)")
+            print("qty: \($0.quantity)")
+            print("variant: \($0.variant)")
         }
+        
         
     }
     
@@ -1010,15 +1202,15 @@ class Dashboard: UIViewController {
             
             
             categoriesStatic[i].clickableimage(x: ((x1/2)+(x1*CGFloat(index)))-(xw/2), y: top, width: xw, height: xw, image: image[i], cornerRadius: 0, borderWidth: 0, borderColor: .clear, function: #selector(SpecificCategorieButton(_:)), any: self, view: categoriesStaticview.view)
-            categoriesStatic[i].clickableimg.tag = i
+            categoriesStatic[i].clickableimg.tag = categoriesStaticId[i]
             categoriesStaticview.view.frame.size.height = categoriesStatic[i].clickableimg.frame.maxY+40
             
             
             categoriesStatic[i].Button(x: x1*CGFloat(index), y: categoriesStatic[i].clickableimg.frame.maxY, width: x1, height: 40, title: title[i], fontsize: 14, any: self, function: #selector(SpecificCategorieButton(_:)), cornerRadius: 0, bordercolor: .clear, bkcolor: .clear, txtcolor: #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), view: categoriesStaticview.view)
-            categoriesStatic[i].button.tag = i
+            categoriesStatic[i].button.tag = categoriesStaticId[i]
         }
     }
-
+    
     
     
     
@@ -1060,7 +1252,7 @@ class Dashboard: UIViewController {
             brandobj[brandobj.count-1].clickableimg.tag = obj.id
             bx+=margin+bw
             brand.scrollview.contentSize.width = brandobj[brandobj.count-1].clickableimg.frame.maxX
-
+            
         }
         if brandobj.count>2 {
             brandsAnimation(index: 0)
@@ -1073,12 +1265,12 @@ class Dashboard: UIViewController {
             self.brand.scrollview.contentOffset.x = self.brandobj[0].clickableimg.frame.minX
             i = 0
         }else{i = index+1}
-        UIView.animate(withDuration: 0.2, delay: 1, options: [], animations: {
+        UIView.animate(withDuration: 0.2, delay: 2, options: [], animations: {
             if(i+1 < self.brandobj.count){
                 self.brand.scrollview.contentOffset.x = self.brandobj[i].clickableimg.frame.minX
             }
-        }) { (true) in
-            time.delay(sec: 1) {
+        }) { _ in
+            time.delay(sec: 2) {
                 if(i+1 > self.brandobj.count){
                     self.brand.scrollview.contentOffset.x = self.brandobj[0].clickableimg.frame.minX
                     self.brandsAnimation(index: 0)
@@ -1212,14 +1404,19 @@ class Dashboard: UIViewController {
             pbarbtn[i].clickableimage(x: pview[i].view.frame.size.width/2 + 2, y: ppricelabel[i].label.frame.maxY, width: 30, height: 30, image: UIImage(named: "barfalse")!, cornerRadius: 0, borderWidth: 0, borderColor: .clear, function: #selector(productRadioBarButton(_:)), any: self, view: pview[i].view)
             //CheckBox
             var cx:CGFloat = 0
-            if isSignedin {cx = (pview[i].view.frame.size.width/2) - 30}
-            else{cx = pview[i].view.frame.size.width/2 - 37.5}
-            pcheck[i].clickableimage(x: cx-30, y: pfavbtn[i].clickableimg.frame.maxY+10, width: 20, height: 20, image: UIImage(named: "checkfalse")!, cornerRadius: 0, borderWidth: 0, borderColor: .clear, function: #selector(productCheckBox(_:)), any: self, view: pview[i].view)
-            pquantity[i].Textfield(x: pcheck[i].clickableimg.frame.maxX+5, y: pfavbtn[i].clickableimg.frame.maxY+5, width: 40, height: 30, placeholder: "", border: 1, borderRadius: 0, txtAlign: .center, bordercolor: #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1), keyboard: .numberPad, textColor: #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), bkcolor: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), view: pview[i].view)
+            if isSignedin {
+                cx = pfavbtn[i].clickableimg.frame.minX-25
+            }
+            else{
+                cx = pfavbtn[i].clickableimg.frame.minX+10
+            }
+            pcheck[i].clickableimage(x: cx, y: pfavbtn[i].clickableimg.frame.maxY+10, width: 20, height: 20, image: UIImage(named: "checkfalse")!, cornerRadius: 0, borderWidth: 0, borderColor: .clear, function: #selector(productCheckBox(_:)), any: self, view: pview[i].view)
+            pquantity[i].Textfield(x: pcheck[i].clickableimg.frame.maxX+5, y: pfavbtn[i].clickableimg.frame.maxY+5, width: 30, height: 30, placeholder: "", border: 1, borderRadius: 0, txtAlign: .center, bordercolor: #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1), keyboard: .numberPad, textColor: #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), bkcolor: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), view: pview[i].view)
             pquantity[i].txtfield.text = "1"
+            pquantity[i].txtfield.addTarget(self, action: #selector(qtyEditChange(_:)), for: .editingChanged)
             
-//            pinc[i].clickableimage(x: pquantity[i].txtfield.frame.maxX+2, y: pfavbtn[i].clickableimg.frame.maxY+10, width: 25, height: 25, image: #imageLiteral(resourceName: "inc.png"), cornerRadius: 15, borderWidth: 0, borderColor: .clear, function: #selector(incquantitybtn(_:)), any: self, view: pview[i].view)
-//            pdec[i].clickableimage(x: pinc[i].clickableimg.frame.maxX+2, y: pfavbtn[i].clickableimg.frame.maxY+10, width: 25, height: 25, image: #imageLiteral(resourceName: "dec"), cornerRadius: 15, borderWidth: 0, borderColor: .clear, function: #selector(decquantitybtn(_:)), any: self, view: pview[i].view)
+            //            pinc[i].clickableimage(x: pquantity[i].txtfield.frame.maxX+2, y: pfavbtn[i].clickableimg.frame.maxY+10, width: 25, height: 25, image: #imageLiteral(resourceName: "inc.png"), cornerRadius: 15, borderWidth: 0, borderColor: .clear, function: #selector(incquantitybtn(_:)), any: self, view: pview[i].view)
+            //            pdec[i].clickableimage(x: pinc[i].clickableimg.frame.maxX+2, y: pfavbtn[i].clickableimg.frame.maxY+10, width: 25, height: 25, image: #imageLiteral(resourceName: "dec"), cornerRadius: 15, borderWidth: 0, borderColor: .clear, function: #selector(decquantitybtn(_:)), any: self, view: pview[i].view)
             
             if isSignedin {
                 pstorebtn[i].clickableimage(x: pquantity[i].txtfield.frame.maxX+5, y: pfavbtn[i].clickableimg.frame.maxY+5, width: 30, height: 30, image: UIImage(named: "shoppingfalse")!, cornerRadius: 0, borderWidth: 0, borderColor: .clear, function: #selector(productShoppingButton(_:)), any: self, view: pview[i].view)
@@ -1238,7 +1435,7 @@ class Dashboard: UIViewController {
             pdec[i].clickableimg.tag = productobj[i].id
             pquantity[i].txtfield.tag = productobj[i].id
             pstorebtn[i].clickableimg.tag = productobj[i].id
-
+            
             
             pview[i].view.frame.size.height = pquantity[i].txtfield.frame.maxY+20
             productLayout.view.frame.size.height = pview[i].view.frame.maxY
@@ -1262,10 +1459,17 @@ class Dashboard: UIViewController {
             }        }
     }
     
+    @objc func qtyEditChange(_ pid:UITextField){
+        productobj.filter{$0.id == pid.tag}.first.map{
+            $0.quantity = (pid.text?.toInt()) ?? 1
+        }
+        
+    }
     
     
     
-   
+    
+    
     
     func updateframe() {
         check[1].clickableimg.frame.origin.y = productLayout.view.frame.maxY+30
@@ -1323,14 +1527,14 @@ class Dashboard: UIViewController {
 
 
 
-   /////////////////////////////////////
-   /////////////////////////////////////
-   //////  Slider
-   /////////////////////////////////////
-   /////////////////////////////////////
+/////////////////////////////////////
+/////////////////////////////////////
+//////  Slider
+/////////////////////////////////////
+/////////////////////////////////////
 
 class Slider: UIView {
-   
+    
     let imageSlider = UIScrollView()
     let defaultimg = UI()
     let helperimg = UI()
@@ -1367,7 +1571,7 @@ class Slider: UIView {
             self.headerSlider(currentindex: 0, images: images, controllerColor: controllerColor)
         }
         
-                
+        
     }
     
     func headerSlider(currentindex:Int,images:[String],controllerColor:UIColor) {

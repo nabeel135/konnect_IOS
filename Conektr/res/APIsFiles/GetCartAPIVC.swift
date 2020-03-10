@@ -7,6 +7,9 @@
 //
 
 import UIKit
+import Alamofire
+import SwiftyJSON
+
 
 class GetCartAPIVC: UIViewController {
 
@@ -26,12 +29,71 @@ class GetCartAPIVC: UIViewController {
                            manager.saveToken(token: defaults.string(forKey: "Token")!)
                         let parameters:[String:Any] = ["token":defaults.string(forKey: "Token")!]
                         let urlString = "/get_cart.php?token=\(defaults.string(forKey: "Token")!)"
-                        manager.GetCartItems(withParameters: urlString, successBlock: GetSucceeded, failureBlock: GetFailed)
-        //                self.GetQuote(token: defaults.string(forKey: "Token")!)
+                        
+                        let url = "http://dev.conektr.com/get_cart.php?token=\(defaults.string(forKey: "Token")!)"
+                        Alamofire.request(url,
+                                          method: .get,
+                                          parameters: nil,
+                                          headers: ["Accept":"application/json"]).responseData { (response) in
+                                            switch response.result{
+                                            case .success(let data):
+                                                /*--------------------*/
+                                                let result = JSON(data)
+                                                
+                                                //print(result)
+                                                
+                                                let data = result["data"].dictionaryValue
+                                                //print(data)
+                                                let distributors = data["distributors"]?.arrayValue
+                                                cartobj.removeAll()
+                                                for dist in distributors! {
+                                                    for obj in data[dist.stringValue]!.arrayValue {
+                                                        
+                                                        var crt = cart()
+                                                        crt.distributorID = obj["distributor_id"].intValue
+                                                        crt.distributorName = obj["distributor_name"].stringValue
+                                                        crt.itemID = obj["item_id"].intValue
+                                                        crt.id = obj["item_id"].intValue
+                                                        crt.sku = obj["sku"].stringValue
+                                                        crt.qty = obj["qty"].intValue
+                                                        crt.quantity = obj["qty"].intValue
+                                                        crt.imgUrl = "https://www.dev.conektr.com/pub/media/catalog/product"+obj["value"].stringValue
+                                                        crt.name = obj["name"].stringValue
+                                                        crt.title = obj["name"].stringValue
+                                                        crt.price = obj["price"].doubleValue
+                                                        crt.productType = obj["product_type"].stringValue
+                                                        crt.quoteID = obj["quote_id"].stringValue
+                                                        cartobj.append(crt)
+                                                    }
+                                                }
+                                                
+                                                
+                                                let dashboard = NetworkingHelper.sharedNetworkManager.appDelegate().presentedViewController!
+                                                weak var weakSelf = dashboard
+                                                
+                                                AlertHelper.hideLoadingView(ForView: weakSelf!.view, Animated: true)
+                                                
+                                                myCartpop.Create(any: self, viewCartBtn: #selector(self.myCartViewCartButton(_:)), checkoutBtn: #selector(self.myCartCheckoutButton(_:)), view: bodyfor.pop.scrollview)
+                                                
+                                                /*--------------------*/
+
+                                            case .failure(let err):
+                                                print(err.localizedDescription)
+                                            }
+                        }
+//                        manager.GetCartItems(
+//                            withParameters: urlString,
+//                            successBlock: GetSucceeded,
+//                            failureBlock: GetFailed)
+//                        self.GetQuote(token: defaults.string(forKey: "Token")!)
                         
                        }
         else
                        {
+                        let dashboard = NetworkingHelper.sharedNetworkManager.appDelegate().presentedViewController!
+                        weak var weakSelf = dashboard
+                        
+                        AlertHelper.hideLoadingView(ForView: weakSelf!.view, Animated: true)
                         AlertHelper.showErrorAlert(WithTitle: "Error", Message: "Try to Login Again", Sender: NetworkingHelper.sharedNetworkManager.appDelegate().presentedViewController!)
         }
                    
@@ -39,6 +101,7 @@ class GetCartAPIVC: UIViewController {
             
             func GetSucceeded(task:URLSessionDataTask, responseObject:Any?)
             {
+                
                 if responseObject == nil
                 {
                     return
@@ -50,10 +113,11 @@ class GetCartAPIVC: UIViewController {
                     let array = try decoder.decode(CartsModel.self, from: responseObject as! Data)
                     
                     cartobj.removeAll()
-                    
                     for obj in array.data ?? []
                     {
                         var crt = cart()
+//                        crt.distributorID = obj.
+//                        crt.distributorName =
                         crt.itemID = obj.itemID
                         crt.id = obj.itemID!
                         crt.sku = obj.sku
@@ -68,8 +132,6 @@ class GetCartAPIVC: UIViewController {
                         cartobj.append(crt)
                     }
                     
-//                    print(array)
-                    
                 }
                     catch
                     {
@@ -82,35 +144,21 @@ class GetCartAPIVC: UIViewController {
                 AlertHelper.hideLoadingView(ForView: weakSelf!.view, Animated: true)
                 
                 myCartpop.Create(any: self, viewCartBtn: #selector(myCartViewCartButton(_:)), checkoutBtn: #selector(myCartCheckoutButton(_:)), view: bodyfor.pop.scrollview)
+                
 //                myCartpop.updateCartlist()
 //                myCartpop.body.scrollview.frame.origin.y = y-70
                 }
                 
             func GetFailed(task:URLSessionDataTask?, error:Error)
             {
-//                if error.localizedDescription == "Request failed: unauthorized (401)"
-//                {
-//                    UserDefaults.standard.set(false, forKey: "IsLogined")
-//                    AlertHelper.showErrorAlert(WithTitle: "Error", Message: "You are not Login", Sender: NetworkingHelper.sharedNetworkManager.appDelegate().presentedViewController!)
-//                    return
-//                }
                 let dashboard = NetworkingHelper.sharedNetworkManager.appDelegate().presentedViewController!
                 weak var weakSelf = dashboard
                 
                 AlertHelper.hideLoadingView(ForView: weakSelf!.view, Animated: true)
                 myCartpop.Create(any: self, viewCartBtn: #selector(myCartViewCartButton(_:)), checkoutBtn: #selector(myCartCheckoutButton(_:)), view: bodyfor.pop.scrollview)
-//                AlertHelper.showErrorAlert(WithTitle: "Error", Message: error.localizedDescription, Sender: NetworkingHelper.sharedNetworkManager.appDelegate().presentedViewController!)
             }
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
+    
     
     @objc func myCartViewCartButton(_ btn:UIButton){
                
@@ -118,11 +166,11 @@ class GetCartAPIVC: UIViewController {
         myCartpop.disAppear()
         
         // footerBar linked pages
-        searchResult.disAppear()
+        search.disAppear()
         Checkout.disAppear()
         SignIn.disAppear()
         bodyfor.CreateAccount.scrollview.isHidden = true
-        forgotpassword.disAppear()
+        bodyfor.forgotPassword.scrollview.isHidden = true
         
         shoppingCart.Create(view: bodyfor.ShoppingCart.scrollview)
     }
@@ -136,12 +184,11 @@ class GetCartAPIVC: UIViewController {
         myCartpop.disAppear()
                
         // footerBar linked pages
-        searchResult.disAppear()
+        search.disAppear()
         shoppingCart.disAppear()
         SignIn.disAppear()
         bodyfor.CreateAccount.scrollview.isHidden = true
-        forgotpassword.disAppear()
-        
+        bodyfor.forgotPassword.scrollview.isHidden = true    
         
         Checkout.create(view: bodyfor.Checkout.scrollview)
     }

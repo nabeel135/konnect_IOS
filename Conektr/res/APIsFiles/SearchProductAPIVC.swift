@@ -32,6 +32,21 @@ class SearchProductAPIVC: UIViewController {
         manager.SearchProductByText(withurlString: urlStr, successBlock: GetSucceeded, failureBlock: GetFailed)
     }
     
+    func GetCategorySearchResult(str:String) {
+            let urlStr = "/rest/V1/products?searchCriteria[filter_groups][0][filters][0][field]=category_id&searchCriteria[filter_groups][0][filters][0][value]=\(str)"
+            
+    //        print(urlStr)
+            let manager = NetworkingHelper.sharedNetworkManager
+            manager.SearchProductByText(withurlString: urlStr, successBlock: GetSucceeded, failureBlock: GetFailed)
+        }
+    
+    func GetBrandSearchResult(str:String) {
+            let urlStr = "/rest/V1/products?searchCriteria[filter_groups][0][filters][0][field]=brands&searchCriteria[filter_groups][0][filters][0][value]=\(str)"
+            
+    //        print(urlStr)
+            let manager = NetworkingHelper.sharedNetworkManager
+            manager.SearchProductByText(withurlString: urlStr, successBlock: GetSucceeded, failureBlock: GetFailed)
+        }
     
     func GetSucceeded(task:URLSessionDataTask, responseObject:Any?)
     {
@@ -96,9 +111,9 @@ class SearchProductAPIVC: UIViewController {
             Checkout.disAppear()
             SignIn.disAppear()
             bodyfor.CreateAccount.scrollview.isHidden = true
-            forgotpassword.disAppear()
-            
-            search.create(login: UserDefaults.standard.bool(forKey: "IsLogined"), view: bodyfor.SearchResult.scrollview)
+            bodyfor.forgotPassword.scrollview.isHidden = true
+
+            search.create(heading: "", login: UserDefaults.standard.bool(forKey: "IsLogined"), view: bodyfor.SearchResult.scrollview)
         }
         catch NetworkingHelper.NetworkErrors.NilValue
         {
@@ -111,9 +126,9 @@ class SearchProductAPIVC: UIViewController {
             Checkout.disAppear()
             SignIn.disAppear()
             bodyfor.CreateAccount.scrollview.isHidden = true
-            forgotpassword.disAppear()
-            
-            search.create(login: UserDefaults.standard.bool(forKey: "IsLogined"), view: bodyfor.SearchResult.scrollview)
+            bodyfor.forgotPassword.scrollview.isHidden = true
+
+            search.create(heading: "", login: UserDefaults.standard.bool(forKey: "IsLogined"), view: bodyfor.SearchResult.scrollview)
         }
         catch
         {
@@ -123,7 +138,6 @@ class SearchProductAPIVC: UIViewController {
     
     func GetFailed(task:URLSessionDataTask?, error:Error)
     {
-        
         weak var weakSelf = self
         AlertHelper.showErrorAlert(WithTitle: "Error", Message: error.localizedDescription, Sender: NetworkingHelper.sharedNetworkManager.appDelegate().presentedViewController!)
     }

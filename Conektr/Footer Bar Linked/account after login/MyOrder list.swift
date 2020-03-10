@@ -15,7 +15,6 @@ class orderlistVC: UIViewController {
     
     
     let body = UI()
-    
     let header  = UI()
     
     override func viewDidLoad() {

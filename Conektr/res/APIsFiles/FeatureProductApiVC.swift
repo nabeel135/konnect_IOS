@@ -52,7 +52,6 @@ class FeatureProductApiVC: UIViewController {
                 let psku = obj.sku!
                 let pprice = obj.price ?? Double()
                 
-                
                 let pimageurl = (obj.customAttributes?.filter{$0.attributeCode == AttributeCode.image}.first?.value?.string() ?? String())
                 let pdesc = obj.customAttributes?.filter{$0.attributeCode == AttributeCode.attributeCodeDescription}.first?.value?.string() ?? "N/A"
                 let pShortdesc = obj.customAttributes?.filter{$0.attributeCode == AttributeCode.shortDescription}.first?.value?.string()
@@ -89,8 +88,9 @@ class FeatureProductApiVC: UIViewController {
 //                }
                 
             }
-            NetworkingHelper.sharedNetworkManager.appDelegate().presentedViewController!.RefreshProduct()
-            NetworkingHelper.sharedNetworkManager.appDelegate().presentedViewController!.updateframe()
+            loaderEnd()
+            NetworkingHelper.sharedNetworkManager.appDelegate().presentedViewController?.RefreshProduct()
+            NetworkingHelper.sharedNetworkManager.appDelegate().presentedViewController?.updateframe()
             //////////////////////////////////////////////////////////////////////////////////
             
             

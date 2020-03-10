@@ -36,6 +36,7 @@ struct ProdConCustomAttribute: Codable {
     var attributeCode: String?
     var value: ProdConValue?
 
+
     enum CodingKeys: String, CodingKey {
         case attributeCode = "attribute_code"
         case value
@@ -67,6 +68,14 @@ enum ProdConValue: Codable {
         case .stringArray(let x):
             try container.encode(x)
         }
+    }
+    func string() -> String? {
+            switch self {
+            case .string(let x):
+                return x
+            case .stringArray(let x):
+                return x.first
+            }
     }
 }
 

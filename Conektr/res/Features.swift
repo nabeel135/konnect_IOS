@@ -4,7 +4,6 @@
 import Foundation
 import UIKit
 import AVFoundation
-import AFNetworking
 
 
 
@@ -343,31 +342,6 @@ class dt {
     
     
     
-    // DEPEND ON AFNETWORKING COCOAPOD
-    func URLtoImage(imgurl:String) -> UIImage {
-        var rimg = UIImage()
-        do{
-            guard let url = NSURL(string: imgurl as String) else {
-                throw NetworkingHelper.NetworkErrors.NilValue
-            }
-            let manager = AFHTTPSessionManager()
-            manager.responseSerializer = AFImageResponseSerializer()
-            manager.get(url.absoluteString!,
-                        parameters: nil,
-                        progress: nil, success: { (task, response) in
-                            rimg = response as! UIImage
-            }) { (task, err) in
-                print("Error: " + err.localizedDescription)
-            }
-        }
-        catch{
-            
-        }
-        
-        return rimg
-    }
-    
-    
     
     
     
@@ -634,6 +608,14 @@ func storyboardView(boardName:String,pageID:String) -> UIViewController {
     return         UIStoryboard(name: boardName, bundle: nil).instantiateViewController(identifier: pageID)
 }
 
+func nibView(fileName:String,ownerClass:Any) -> UIView{
+    
+    return Bundle.main.loadNibNamed(fileName, owner: ownerClass, options: nil)![0] as! UIView
+}
+
+func setrootView(viewController:UIViewController){
+    UIApplication.shared.windows[0].rootViewController = viewController
+}
 
 extension Double {
     func roundToDecimal(_ fractionDigits: Int) -> Double {
@@ -650,6 +632,43 @@ extension Double {
 
 
 
+// MARK:- Extension String
+
+extension String {
+    var stringWidth: CGFloat {
+        let constraintRect = CGSize(width: UIScreen.main.bounds.width, height: .greatestFiniteMagnitude)
+        let boundingBox = self.trimmingCharacters(in: .whitespacesAndNewlines).boundingRect(with: constraintRect, options: [.usesLineFragmentOrigin, .usesFontLeading], attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14)], context: nil)
+        return boundingBox.width
+    }
+    
+
+    var stringHeight: CGFloat {
+        let constraintRect = CGSize(width: UIScreen.main.bounds.width, height: .greatestFiniteMagnitude)
+        let boundingBox = self.trimmingCharacters(in: .whitespacesAndNewlines).boundingRect(with: constraintRect, options: [.usesLineFragmentOrigin, .usesFontLeading], attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14)], context: nil)
+        return boundingBox.height
+    }
+    
+    func toInt() -> Int{
+        return Int(self) ?? Int()
+    }
+}
+
+
+// MARK:- Extension Int
+
+extension Int {
+    func tostring() -> String{
+        return String(self)
+    }
+}
+
+// MARK:- Extension Double
+
+extension Double{
+    func tostring() -> String{
+        return String(self)
+    }
+}
 
 
 

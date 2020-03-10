@@ -186,6 +186,7 @@ class AddressBookVC: UIViewController {
         
         var top:CGFloat = AdditionalAddressEntries.frame.maxY+10
         
+
         let addres = custDetailModel?.addresses
         
         for obj1 in addres ?? []
